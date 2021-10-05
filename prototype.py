@@ -21,6 +21,13 @@ import pickle
 
 # start_time = time.time()
 
+# Import data
+path_data_credit_card = "/Users/greg/Downloads/AR_Master_Thesis/data/creditcard.csv"
+path_HCC = "/Users/greg/Downloads/AR_Master_Thesis/data/HCC_preprocessed.csv"
+path_ILPD = "/Users/greg/Downloads/AR_Master_Thesis/data/ILPD_preprocessed.csv"
+
+data_credit_card = pd.read_csv(path_data_credit_card)
+
 # iris = pd.read_csv('/kaggle/input/iris/Iris.csv')
 X = None
 y = None
