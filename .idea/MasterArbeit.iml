@@ -6,6 +6,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="pythonProject" />
     <orderEntry type="module" module-name="scientificProject" />
+    <orderEntry type="module" module-name="featurecloudfederatedboosting-reidt_flat" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

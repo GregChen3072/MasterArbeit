@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MasterArbeit.iml" filepath="$PROJECT_DIR$/.idea/MasterArbeit.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/AR_Master_Thesis/reference/featurecloudfederatedboosting-reidt_flat/.idea/featurecloudfederatedboosting-reidt_flat.iml" filepath="$USER_HOME$/Downloads/AR_Master_Thesis/reference/featurecloudfederatedboosting-reidt_flat/.idea/featurecloudfederatedboosting-reidt_flat.iml" />
       <module fileurl="file://$PROJECT_DIR$/../pythonProject/.idea/pythonProject.iml" filepath="$PROJECT_DIR$/../pythonProject/.idea/pythonProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/../scientificProject/.idea/scientificProject.iml" filepath="$PROJECT_DIR$/../scientificProject/.idea/scientificProject.iml" />
     </modules>
