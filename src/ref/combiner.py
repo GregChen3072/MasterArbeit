@@ -11,7 +11,7 @@ import numpy as np
 from numpy import ndarray
 
 from sklearn.ensemble import AdaBoostClassifier
-from database import Database
+from ref.database import Database
 
 
 class CombinedAdaBoostClassifier(AdaBoostClassifier):
@@ -57,6 +57,7 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
             self.estimators_.extend(self.list_of_ada_booster[-1].estimators_)
 
             # You're actually add & adjusting / updating databases weights after each batch!
+            '''
             list_of_databases_weights, n_evaluated_batches = self.__add_database_weight(
                 list_of_databases_weights=self.list_of_databases_weights,
                 database=database,
@@ -64,6 +65,7 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
                 batch_size=self.patients_batch_size)
             self.list_of_databases_weights = list_of_databases_weights
             self.n_evaluated_batches = n_evaluated_batches
+            '''
             # estimators weights
             # make ESTIMATOR WEIGHTS
             list_of_estimator_weights = self.__make_estimator_weights(
@@ -193,6 +195,7 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
                               batch_size: int = 1):
         new_batches = database.get_number_of_batches_of_patients(
             batch_size=batch_size)
+        # new_batches = 1
         list_of_databases_weights = list_of_databases_weights * n_evaluated_batches
         list_of_databases_weights = np.concatenate(
             (list_of_databases_weights, new_batches), axis=0)

@@ -8,13 +8,13 @@ Created on Tue Aug 25 17:27:58 2020
 # from sklearn
 from sklearn.ensemble import AdaBoostClassifier
 # from sklearn.ensemble import GradientBoostingClassifier
-from next_n_size import NextN
+from ref.next_n_size import NextN
 import numpy as np
 # from sklearn.base import is_regressor
 # from sklearn.utils.validation import _check_sample_weight as check_sample_weight
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
-from helpfunctions import _check_sample_weight
+from ref.helpfunctions import _check_sample_weight
 
 
 class WarmStartAdaBoostClassifier(AdaBoostClassifier, BaseEstimator):
@@ -26,59 +26,62 @@ class WarmStartAdaBoostClassifier(AdaBoostClassifier, BaseEstimator):
                  random_state=None):
 
         super().__init__(base_estimator=base_estimator,
-                 n_estimators=n_estimators,
-                 learning_rate=learning_rate,
-                 # loss=loss,
-                 random_state=random_state)
+                         n_estimators=n_estimators,
+                         learning_rate=learning_rate,
+                         # loss=loss,
+                         random_state=random_state)
 
         self.loss = loss
         self.estimators_ = []
         self.next_start = 0
-        self.estimator_weights_ = np.array([]) #np.zeros(self.n_estimators, dtype=np.float64)
-        self.estimator_errors_ = np.array([])  #np.ones(self.n_estimators, dtype=np.float64)
+        # np.zeros(self.n_estimators, dtype=np.float64)
+        self.estimator_weights_ = np.array([])
+        # np.ones(self.n_estimators, dtype=np.float64)
+        self.estimator_errors_ = np.array([])
         self.n_estimators = 0
         self.first_fit = True
         # self.random_state = random_state
-        
+
     def set_beginning(self):
         self.estimators_ = []
         self.next_start = 0
-        self.estimator_weights_ = np.array([]) #np.zeros(self.n_estimators, dtype=np.float64)
-        self.estimator_errors_ = np.array([])  #np.ones(self.n_estimators, dtype=np.float64)
+        # np.zeros(self.n_estimators, dtype=np.float64)
+        self.estimator_weights_ = np.array([])
+        # np.ones(self.n_estimators, dtype=np.float64)
+        self.estimator_errors_ = np.array([])
         self.n_estimators = 0
         self.first_fit = True
         return self
-    
+
     def set_next_n(self, n: int = 1):
-        if(n==0):
+        if(n == 0):
             raise Exception("n is not alllowed to be 0.")
         #print("Old n: "+str(self.n_estimators))
         #print("New n: "+str(n))
         if self.n_estimators >= n:
-            raise Exception("Out of bounds: "+ str(n))
+            raise Exception("Out of bounds: " + str(n))
         self.next_start = self.n_estimators
         self.n_estimators = n
         if(self.next_start == 0):
-            self.estimator_weights_ = np.zeros(self.n_estimators, dtype=np.float64)
-            self.estimator_errors_ = np.ones(self.n_estimators, dtype=np.float64)
+            self.estimator_weights_ = np.zeros(
+                self.n_estimators, dtype=np.float64)
+            self.estimator_errors_ = np.ones(
+                self.n_estimators, dtype=np.float64)
         else:
             zeros = np.zeros((self.n_estimators-self.next_start),
-                                 dtype=np.float64)
-            self.estimator_weights_ = np.concatenate((self.estimator_weights_, zeros))
-            #except:
-                # print(self.estimator_weights_)
-             #   print(str(self.n_estimators-self.next_start))
-             #   raise Exception("bla")
-            ones = np.ones((self.n_estimators-self.next_start), 
+                             dtype=np.float64)
+            self.estimator_weights_ = np.concatenate(
+                (self.estimator_weights_, zeros))
+            # except:
+            # print(self.estimator_weights_)
+            #   print(str(self.n_estimators-self.next_start))
+            #   raise Exception("bla")
+            ones = np.ones((self.n_estimators-self.next_start),
                            dtype=np.float64)
-            self.estimator_errors_ = np.concatenate((self.estimator_errors_, ones))
+            self.estimator_errors_ = np.concatenate(
+                (self.estimator_errors_, ones))
         return self
-    
 
-        
-        
-    
-    
     def fit(self, X, y, sample_weight=None):
         # return super().fit(X, y, sample_weight)
         """Build a boosted classifier/regressor from the training set (X, y).
@@ -106,26 +109,25 @@ class WarmStartAdaBoostClassifier(AdaBoostClassifier, BaseEstimator):
         if self.learning_rate <= 0:
             raise ValueError("learning_rate must be greater than zero")
         # !!! Änderung
-        #check_params = {"accept_sparse":['csr', 'csc'],
+        # check_params = {"accept_sparse":['csr', 'csc'],
         #               "ensure_2d":True,
         #               "allow_nd":True,
         #               "dtype":None,
         #               "y_numeric":is_regressor(self)}
-        
 
-        X, y = super()._validate_data(X, y) # , **check_params)
+        X, y = super()._validate_data(X, y)  # , **check_params)
         sample_weight = _check_sample_weight(sample_weight, X, np.float64)
         sample_weight /= sample_weight.sum()
         if np.any(sample_weight < 0):
             raise ValueError("sample_weight cannot contain negative weights")
-            
+
         # Check parameters
         self._validate_estimator()
 
-        # !!! Änderung    
-        
+        # !!! Änderung
+
         # Clear any previous fit results
-        # self.estimators_ = [] 
+        # self.estimators_ = []
         # now defined in __init__
         # self.estimator_weights_ = np.zeros(self.n_estimators, dtype=np.float64)
         # self.estimator_errors_ = np.ones(self.n_estimators, dtype=np.float64)
@@ -134,9 +136,9 @@ class WarmStartAdaBoostClassifier(AdaBoostClassifier, BaseEstimator):
         # generate a seed at each iteration
         random_state = check_random_state(self.random_state)
 
-        # !!! Änderung 
+        # !!! Änderung
         # print(range(self.next_start, self.n_estimators))
-        for iboost in range(self.next_start, self.n_estimators): #Änderung
+        for iboost in range(self.next_start, self.n_estimators):  # Änderung
             # print(iboost)
             # for iboost in range(self.n_estimators):
             # Boosting step
@@ -168,16 +170,14 @@ class WarmStartAdaBoostClassifier(AdaBoostClassifier, BaseEstimator):
                 sample_weight /= sample_weight_sum
         # print("fit fertig")
         return self
-    
-    
-    
+
 
 class Classifier:
     def __init__(self, classifier=WarmStartAdaBoostClassifier(), n_generator: NextN = None) -> None:
         super().__init__()
         #print("N_Generator: "+str(n_generator))
         if n_generator is None:
-            self.n_generator = NextN(n_size= 50)
+            self.n_generator = NextN(n_size=50)
             #print("Standard N Generator")
         else:
             self.n_generator = n_generator
@@ -189,11 +189,11 @@ class Classifier:
 
     def get_prepared_classifier(self):
         # print("prepare")
-        #if self.classifier is WarmStartAdaBoostClassifier:
+        # if self.classifier is WarmStartAdaBoostClassifier:
         n = self.n_generator.get_next_n()
         # print("With n: "+str(n))
-        self.classifier = self.classifier.set_next_n(n = n)
-        #elif self.classifier is AdaBoostClassifier:
+        self.classifier = self.classifier.set_next_n(n=n)
+        # elif self.classifier is AdaBoostClassifier:
         #    self.classifier.set_params(n_estimators=self.n_generator.get_next_n())
         return self.classifier
 
