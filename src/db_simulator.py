@@ -35,7 +35,7 @@ def simulate_1_database_with_all_data_centralized():
     return X, y
 
 
-def prepare_data(data=load_breast_cancer(), n_db=5, test_size=0.2):
+def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), n_db=5, test_size=0.2):
     X_train, X_test, y_train, y_test = train_test_split(
         data.get("data"), data.get("target"), test_size=test_size, random_state=6)
 
@@ -74,9 +74,12 @@ def prepare_data(data=load_breast_cancer(), n_db=5, test_size=0.2):
     return prepared_data
 
 
-def simulate_n_databases_with_equal_sample_size(df_train_set: pd.DataFrame, n: int):
+def _obsolete_simulate_n_databases_with_equal_sample_size(df_train_set: pd.DataFrame, n: int):
     '''
         Calling this function will simulate n databases with equal sample sizes based on the sklearn dataset for binary classification. 
+        Input: DataFrame object; n
+        Ouput: List of DataFrame objects. 
+
         Set n = {1, 2, 5, 10, 20, 50, 100}. 
         #samples in each site = population size / n
         Range of n = [2, 100] (specified in the drafted paper. )

@@ -4,7 +4,7 @@ from sklearn.datasets import load_iris
 from sklearn.datasets import load_breast_cancer
 
 # User defined functions
-from db_simulator import prepare_data
+from db_simulator import simulate_n_databases_with_equal_sample_size
 
 # Data preparation
 import pandas as pd
@@ -29,7 +29,8 @@ data = load_breast_cancer()
 n_db = 5
 test_size = 0.2
 
-prepared_data = prepare_data(data=data, n_db=n_db, test_size=test_size)
+prepared_data = simulate_n_databases_with_equal_sample_size(
+    data=data, n_db=n_db, test_size=test_size)
 
 # print(type(prepared_data.get('db_list')[0]))
 
