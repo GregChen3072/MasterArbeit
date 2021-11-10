@@ -193,6 +193,7 @@ class Classifier:
         n = self.n_generator.get_next_n()
         # print("With n: "+str(n))
         self.classifier = self.classifier.set_next_n(n=n)
+        # self.classifier = self.classifier.s
         # elif self.classifier is AdaBoostClassifier:
         #    self.classifier.set_params(n_estimators=self.n_generator.get_next_n())
         return self.classifier

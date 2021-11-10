@@ -8,7 +8,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier
 
 # Model Evaluation
-from sklearn.metrics import balanced_accuracy_score, roc_auc_score, matthews_corrcoef, f1_score
+from evaluation import evaluate
+
+# Utils
+import time
 
 
 X, y = simulate_1_database_with_all_data_centralized()
@@ -16,17 +19,28 @@ X, y = simulate_1_database_with_all_data_centralized()
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=6)
 
+timer_start = time.time()
+
 abc = AdaBoostClassifier(n_estimators=100, learning_rate=1, random_state=1)
 
-model = abc.fit(X_train, y_train)
+classifier_central = abc.fit(X_train, y_train)
 
-y_pred = model.predict(X_test)
+# Stop timer
+timer_stop = time.time()
+duration = timer_stop - timer_start
 
-print("AdaBoost Classifier Model F-1 Score:",
-      f1_score(y_test, y_pred, average=None))
-print("AdaBoost Classifier Model MCC Score:",
-      matthews_corrcoef(y_test, y_pred))
-print("AdaBoost Classifier Model AUC Score:",
-      roc_auc_score(y_test, y_pred, average=None))
-print("AdaBoost Classifier Model ACC Score:",
-      balanced_accuracy_score(y_test, y_pred))
+
+y_pred = classifier_central.predict(X_test)
+
+print(f'Training Time: {duration} seconds. ')
+print()
+
+# X_test = prepared_data.get("test_set").get("X_test")
+# y_test = prepared_data.get("test_set").get("y_test")
+
+f_1, mcc, auc, acc = evaluate(classifier_central, X_test, y_test)
+
+print(f'F-1 Score: {f_1}')
+print(f'MCC Score: {mcc}')
+print(f'AUC Score: {auc}')
+print(f'ACC Score: {acc}')

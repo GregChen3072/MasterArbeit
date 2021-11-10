@@ -14,11 +14,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier
 
 # Model Evaluation
-from sklearn.metrics import balanced_accuracy_score, roc_auc_score, matthews_corrcoef, f1_score
+from evaluation import evaluate
 
 # Reference
 from ref.database import Database
-from ref.main import make_non_iterative_classifier
 from ref.combiner import CombinedAdaBoostClassifier
 
 # Utils
@@ -26,14 +25,18 @@ import time
 
 data = load_breast_cancer()
 
+# Settings
 n_db = 5
 test_size = 0.2
+#
 
+# Simulate n DBs with equal sample size
 prepared_data = simulate_n_databases_with_equal_sample_size(
     data=data, n_db=n_db, test_size=test_size)
 
 # print(type(prepared_data.get('db_list')[0]))
 
+########
 print()
 print("Non-Federated Model")
 len_data = len(data.get("data"))
@@ -55,21 +58,23 @@ score_central = classifier_central.score(prepared_data.get("test_set").get(
 print()
 print("Non-Federated Model Score")
 print(str(round(score_central, 5)))
+########
 
-
-res = list()
-timer_list = list()
-
+# Print title
 print()
 print("Federation Non-iterative not Weighted")
 
-
+# Initialize
+res = list()
+timer_list = list()
 db_list = prepared_data.get("db_list")
 
-print("n_db\tscore\tduration in seconds")
+# Start timer
+# print("n_db\tscore\tduration in seconds")
 timer_start = time.time()
 
-classifier_federated = CombinedAdaBoostClassifier(
+# Instantiate classifier
+classifier_fed_aggregated = CombinedAdaBoostClassifier(
     learning_rate=1.,
     n_estimators=20,
     algorithm='SAMME.R',
@@ -78,16 +83,21 @@ classifier_federated = CombinedAdaBoostClassifier(
     weight_databases=False
 )
 
+
+# Collect all estimators
 for i in range(0, len(db_list)):
     # Data Structure of "db_list": [[Database], [Database], ..., [Database]]
     # Data Structure of "db": [Database]
     db = db_list[i]
-    classifier_federated.add_fit(db)
+    classifier_fed_aggregated.add_fit(db)
 
+# Stop timer
 timer_stop = time.time()
 duration = timer_stop - timer_start
 
-score_federated = classifier_federated.score(
+'''
+# Basic scoring
+score_federated = classifier_fed_aggregated.score(
     X=prepared_data.get("test_set").get("X_test"),
     y=prepared_data.get("test_set").get("y_test")
 )
@@ -100,3 +110,18 @@ print(
     str(duration)
 )
 print()
+'''
+
+
+print(f'Training Time: {duration} seconds. ')
+print()
+
+X_test = prepared_data.get("test_set").get("X_test")
+y_test = prepared_data.get("test_set").get("y_test")
+
+f_1, mcc, auc, acc = evaluate(classifier_fed_aggregated, X_test, y_test)
+
+print(f'F-1 Score: {f_1}')
+print(f'MCC Score: {mcc}')
+print(f'AUC Score: {auc}')
+print(f'ACC Score: {acc}')
