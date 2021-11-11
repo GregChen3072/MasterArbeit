@@ -1,5 +1,4 @@
 # Load population
-from scipy.sparse.construct import random
 from sklearn.datasets import load_iris
 from sklearn.datasets import load_breast_cancer
 
