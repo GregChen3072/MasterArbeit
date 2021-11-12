@@ -17,10 +17,15 @@ import pickle
 
 X, y = load_breast_cancer(return_X_y=True)
 
-cv = StratifiedShuffleSplit(n_splits=5, test_size=0.2, random_state=6)
+sss = StratifiedShuffleSplit(n_splits=5, test_size=0.2, random_state=6)
 
 clf = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=6)
 
+# train a clf_combiner
+# train a clf_iterator
+# Both have .fit()
+# clf_combiner.fit()
+# clf_iterator.classifier.fit())
 
 # https://scikit-learn.org/stable/modules/model_evaluation.html#multimetric-scoring
 # scoring = ['precision_macro', 'recall_macro']
@@ -32,7 +37,39 @@ scoring = {
 }
 
 scores = cross_validate(
-    clf, X, y, cv=cv, scoring=scoring, n_jobs=-1, return_train_score=True, return_estimator=True)
+    clf,
+    X,
+    y,
+    cv=sss,
+    scoring=scoring,
+    n_jobs=-1,
+    return_train_score=False,  # not necessary
+    return_estimator=False
+)
+
+'''
+scores_combiner = cross_validate(
+    clf_combiner,
+    X,
+    y,
+    cv=sss,
+    scoring=scoring,
+    n_jobs=-1,
+    return_train_score=False,
+    return_estimator=False
+)
+
+scores_iterator = cross_validate(
+    clf_iterator.classifier,
+    X,
+    y,
+    cv=sss,
+    scoring=scoring,
+    n_jobs=-1,
+    return_train_score=False,
+    return_estimator=False
+)
+'''
 
 # keys = ['test_acc', 'test_auc', 'test_mcc', 'test_f-1']
 # scores_to_print = [scores.get(key) for key in keys]

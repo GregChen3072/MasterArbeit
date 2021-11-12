@@ -13,8 +13,6 @@ import matplotlib.pyplot as plt
 
 from ref.database import Database
 
-import time
-
 
 def load_iris_data():
     iris = load_iris()
