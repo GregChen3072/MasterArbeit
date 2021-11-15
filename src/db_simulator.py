@@ -12,6 +12,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from ref.database import Database
+from ref.main import make_iterative_classifier
+from ref.main import make_not_iterative_classifier
+from numpy import arange
+import time
 
 
 def load_iris_data():
@@ -111,7 +115,7 @@ def _obsolete_simulate_n_databases_with_equal_sample_size(df_train_set: pd.DataF
     return db_list
 
 
-def simulate_n_samples_per_site():
+def simulate_db_size_imbalance(data=load_breast_cancer(), test_size=0.2, balance_step=0.05, k: int = 1):
     '''
         Interval: 5%
         5%  vs 95%
@@ -119,8 +123,35 @@ def simulate_n_samples_per_site():
         ...
         45% vs 55%
         50% vs 50%
+        DB * 10
     '''
-    pass
+    x_train, x_test, y_train, y_test = train_test_split(
+        data.get("data"),
+        data.get("target"),
+        test_size=test_size
+    )
+    test = {"X": x_test, "y": y_test}
+
+    db_whole = make_database(x_train, y_train)
+
+    db_pairs = list()
+    balance_list = list()
+
+    for balance_size in arange(balance_step, (0.5 + balance_step), balance_step).tolist():
+        for x in range(0, k):
+            x_train_split_1, x_train_split_2, y_train_split_1, y_train_split_2 = train_test_split(
+                x_train, y_train, test_size=round(balance_size, 2))
+            db_1 = make_database(x_train_split_1, y_train_split_1)
+            db_2 = make_database(x_train_split_2, y_train_split_2)
+            db_pairs.append([db_1, db_2])
+            balance_list.append(balance_size)
+
+    res = {"db_whole": db_whole,
+           "db_pairs": db_pairs,
+           "test": test,
+           "balance_list": balance_list}
+
+    return res
 
 
 def simulate_class_imbalance():
