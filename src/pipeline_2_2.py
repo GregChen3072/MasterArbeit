@@ -1,5 +1,4 @@
 # Load population
-from numpy.lib.function_base import kaiser
 from sklearn.datasets import load_iris
 from sklearn.datasets import load_breast_cancer
 
@@ -29,13 +28,12 @@ import time
 data = load_breast_cancer()
 
 # Settings
-n_db = 5
 test_size = 0.2
-#
+
 
 # Simulate n DB pairs with decreasing sample size imbalance
 prepared_data = simulate_db_size_imbalance(
-    data=load_breast_cancer(), test_size=0.2, balance_step=0.05, k=1)
+    data=load_breast_cancer(), test_size=test_size, balance_step=0.05, k=1)
 
 len_data = len(data.get("data"))
 len_test = len_data*test_size
@@ -62,13 +60,14 @@ balance_list = prepared_data.get("balance_list")
 print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
 
 for i in range(0, len(db_pairs)):
-    db_list = db_pairs[i]
+    db_pair = db_pairs[i]
 
     timer_start = time.time()
 
-    classifier_combined = make_not_iterative_classifier(databases=db_list,
+    # Setting: weighing or not (weight_databases=False / True)
+    classifier_combined = make_not_iterative_classifier(databases=db_pair,
                                                         patients_batch_size=1,
-                                                        weight_databases=True)
+                                                        weight_databases=False)
     timer_stop = time.time()
     timer_list.append(timer_stop - timer_start)
     # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))

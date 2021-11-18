@@ -1,17 +1,9 @@
 # Load population
-from scipy.sparse.construct import random
 from sklearn.datasets import load_iris
 from sklearn.datasets import load_breast_cancer
 
 # User defined functions
-from db_simulator import simulate_db_size_imbalance, simulate_n_databases_with_equal_sample_size
-
-# Data preparation
-import pandas as pd
-from sklearn.model_selection import train_test_split
-
-# Classifier
-from sklearn.ensemble import AdaBoostClassifier
+from db_simulator import simulate_db_size_imbalance
 
 # Model Evaluation
 from evaluation import evaluate
@@ -21,6 +13,7 @@ from ref.next_n_size import NextN
 from ref.next_n_size import NextDataSets
 from ref.classifier import WarmStartAdaBoostClassifier
 from ref.classifier import Classifier
+from ref.main import make_iterative_classifier
 
 # Utils
 import time
@@ -52,26 +45,27 @@ patients_batch_size = 10  # Spielt keine Rolle
 prepared_data = simulate_db_size_imbalance(
     data=load_breast_cancer(), test_size=0.2, balance_step=0.05, k=1)
 
+len_data = len(data.get("data"))
+len_test = len_data*test_size
+
+# Extract Test Set (20%)
+X_test = prepared_data.get("test").get("X")
+y_test = prepared_data.get("test").get("y")
+
 # Print title
 print()
-print("Federation Iterative")
+print("Federation Iterative not Weighted")
 
 # Initialize
-res = list()
-timer_list = list()
-db_list = prepared_data.get("db_list")
-
-# Start timer
-timer_start = time.time()
-
-
-# db_list input format: [db yin, db yang]
-# classifier_fed_iterative = make_not_iterative_classifier(
-#    databases=db_list,
-#    patients_batch_size=patients_batch_size,
-#    weight_databases=True
-# )
-
+# res = list()
+res_f_1 = list()
+res_mcc = list()
+res_auc = list()
+res_acc = list()  # Score Containers
+timer_list = list()  # Timers
+db_pairs = prepared_data.get("db_pairs")  # DB Pairs
+# Degrees of balance for each DB pair
+balance_list = prepared_data.get("balance_list")
 
 # Instantiate classifier
 warm_start = WarmStartAdaBoostClassifier()
@@ -81,7 +75,7 @@ classifier_fed_iterative = Classifier(warm_start)
 
 n_generator = NextN(
     n_size=n_estimators,
-    n_data_sets=len(db_list),
+    n_data_sets=len(db_pairs),
     n_type=n_type,
     batch_size=n_batch_size
 )
@@ -91,7 +85,7 @@ classifier_iterator = Classifier(
     n_generator=n_generator
 )
 
-database_chooser = NextDataSets(data_sets=db_list,
+database_chooser = NextDataSets(data_sets=db_pairs,
                                 next_type=var_choosing_next_database,
                                 accuracy_batch_size=patients_batch_size)
 
@@ -115,57 +109,43 @@ print("Progress: ")
 
 n_visits = int(1)
 
-while classifier_iterator.finished() is False:
-    # erhöht die Anzahl der Entscheidungsbäume
-    # .get_prepared_classifier() returns a WarmStartABC object.
-    classifier_fed_iterative = classifier_iterator.get_prepared_classifier()
-    index = database_chooser.get_next_index(classifier_fed_iterative)
-    # print("Index: "+str(index))
-    # print("Length Databases: "+str(len(databases)))
-    current_database = db_list[index]  # wählt die nächste Datenbank
-    # erweitert auf der ausgewählten Datenbank den Klassifizieren
-    classifier_fed_iterative = current_database.extend_classifier(
-        classifier_fed_iterative)
-    classifier_iterator.update_classifier(
-        classifier_fed_iterative)  # updatet den Klassifizierer
-    # print("Round finished.")
-    if n_visits % n_db == 0:
-        print(f'Round {int(n_visits / n_db)} is complete! ')
-    n_visits += 1
-# print("classifier finished.")
+print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
 
-# Stop timer
-timer_stop = time.time()
-duration = timer_stop - timer_start
+for i in range(0, len(db_pairs)):
+    db_pair = db_pairs[i]
 
-# Basic Scoring
-'''
-score_federated = classifier_fed_iterative.score(
-    X=prepared_data.get("test_set").get("X_test"),
-    y=prepared_data.get("test_set").get("y_test")
-)
+    timer_start = time.time()
 
-print()
-print("n_db\tscore\tduration in seconds")
-print(
-    str(len(db_list)) +
-    "\t" +
-    str(round(score_federated, 5)) +
-    "\t" +
-    str(duration)
-)
-print()
-'''
+    classifier_iterative = make_iterative_classifier(
+        databases=db_pair,
+        n_estimators=n_estimators,
+        n_type=n_type,
+        n_batch_size=n_batch_size,
+        var_choosing_next_database=var_choosing_next_database
+    )
 
-print(f'Training Time: {duration} seconds. ')
-print()
+    # Stop timer
+    timer_stop = time.time()
+    timer_list.append(timer_stop - timer_start)
+    # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
-X_test = prepared_data.get("test_set").get("X_test")
-y_test = prepared_data.get("test_set").get("y_test")
+    f_1, mcc, auc, acc = evaluate(classifier_iterative, X_test, y_test)
+    res_f_1.append(f_1)
+    res_mcc.append(mcc)
+    res_auc.append(auc)
+    res_acc.append(acc)
 
-f_1, mcc, auc, acc = evaluate(classifier_fed_iterative, X_test, y_test)
-
-print(f'F-1 Score: {f_1}')
-print(f'MCC Score: {mcc}')
-print(f'AUC Score: {auc}')
-print(f'ACC Score: {acc}')
+    print(
+        str(round(balance_list[i], 2)) +
+        "\t\t\t" +
+        str(f_1) +
+        "\t" +
+        str(round(mcc, 2)) +
+        "\t\t" +
+        str(round(auc, 2)) +
+        "\t\t" +
+        str(round(acc, 2)) +
+        "\t\t" +
+        str(timer_list[i])
+    )
+# return [score_whole, res, dic.get("balance_list"), time_list]
