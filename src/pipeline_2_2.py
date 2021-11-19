@@ -33,7 +33,11 @@ test_size = 0.2
 
 # Simulate n DB pairs with decreasing sample size imbalance
 prepared_data = simulate_db_size_imbalance(
-    data=load_breast_cancer(), test_size=test_size, balance_step=0.05, k=1)
+    data=load_breast_cancer(),
+    test_size=test_size,
+    balance_step=0.05,
+    k=1
+)
 
 len_data = len(data.get("data"))
 len_test = len_data*test_size
@@ -52,8 +56,11 @@ res_f_1 = list()
 res_mcc = list()
 res_auc = list()
 res_acc = list()  # Score Containers
+
 timer_list = list()  # Timers
+
 db_pairs = prepared_data.get("db_pairs")  # DB Pairs
+
 # Degrees of balance for each DB pair
 balance_list = prepared_data.get("balance_list")
 

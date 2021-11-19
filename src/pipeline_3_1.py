@@ -54,30 +54,6 @@ prepared_data = simulate_n_databases_with_equal_sample_size(
 
 # print(type(prepared_data.get('db_list')[0]))
 
-########
-print()
-print("Non-Federated Model")
-len_data = len(data.get("data"))
-print("Number of data points: " + str(len_data))
-len_test = int(len_data * test_size)
-print("Number of data points in test database: " + str(len_test))
-
-# db_central is the "Database" object representing the database with data centralization.
-db_central = prepared_data.get("db_central")
-
-# Train a central model using centralized data.
-classifier_central = AdaBoostClassifier()
-classifier_central.fit(X=db_central.x, y=db_central.y)
-
-# Output the performance measure of the central model.
-score_central = classifier_central.score(prepared_data.get("test_set").get(
-    "X_test"), prepared_data.get("test_set").get("y_test"))
-
-print()
-print("Non-Federated Model Score")
-print(str(round(score_central, 5)))
-########
-
 # Print title
 print()
 print("Federation Iterative")

@@ -37,7 +37,7 @@ def simulate_1_database_with_all_data_centralized():
     return X, y
 
 
-def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), n_db=5, test_size=0.2):
+def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), list_of_n=[1], test_size=0.2):
     X_train, X_test, y_train, y_test = train_test_split(
         data.get("data"), data.get("target"), test_size=test_size, random_state=6)
 
@@ -45,33 +45,55 @@ def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), n_db=
 
     db_central = make_database(X_train, y_train)
 
+    # Convert arrays into df and get ready for sampling without replacement.
     df_train_set = pd.DataFrame(data=X_train)
     df_train_set['target'] = y_train
 
-    # Set number of databases.
-    n_db = n_db
+    # List of db_list
     # Define an empty list which will be filled with dataframes as list elements.
     # Each list element represents a database at a certain site / hospital.
-    db_list = list()
-    n_samples_per_db = int(len(y_train) / n_db)
+    '''
+        Structure: 
+        db_list = [
+            [db_obj_1], 
+            [db_obj_1, db_obj_2], 
+            [db_obj_1, db_obj_2, db_obj_3], 
+            ...            
+        ]
+    '''
+    list_of_n_dbs = list()
 
-    # Divide the population in n parts.
-    for i in range(0, n_db):
-        db_i_df = df_train_set.sample(
-            n=n_samples_per_db, replace=False, random_state=1)
-        X_train_of_db_i = db_i_df.drop(columns=['target']).to_numpy()
-        y_train_of_db_i = db_i_df['target'].to_numpy()
-        db_i = make_database(X_train_of_db_i, y_train_of_db_i)
-        # Here constructing db_list filled with single Database objects.
-        # Reason: CombinedAdaBoostClassifier.add_fit() is designed to accept this data structure.
-        db_list.append(db_i)
-        # Sampling without replacement
-        df_train_set.drop(db_i_df.index)
+    # list_of_n = [1, 2, 5, 10, 20, 50, 100]
+    for n in list_of_n:
+        # Set number of databases.
+        n_dbs = list()
+
+        n_samples_per_db = int(len(y_train) / n)
+
+        # Construct a list of DBs containing n times DB
+        # Divide the population in n parts.
+        # n = {1, 2, 3, ..., n}
+        for n in range(0, n):
+            db_n_df = df_train_set.sample(
+                n=n_samples_per_db, replace=False, random_state=1)
+
+            X_train_of_db_i = db_n_df.drop(columns=['target']).to_numpy()
+            y_train_of_db_i = db_n_df['target'].to_numpy()
+
+            db_n = make_database(X_train_of_db_i, y_train_of_db_i)
+            # Here constructing db_list filled with single Database objects.
+            # Reason: CombinedAdaBoostClassifier.add_fit() is designed to accept this data structure.
+            n_dbs.append(db_n)
+            # Sampling without replacement
+            df_train_set.drop(db_n_df.index)
+
+        list_of_n_dbs.append(n_dbs)
 
     prepared_data = {
         "db_central": db_central,
-        "db_list": db_list,
-        "test_set": test_set
+        "list_of_n_dbs": list_of_n_dbs,
+        "test_set": test_set,
+        "list_of_n": list_of_n
     }
     return prepared_data
 

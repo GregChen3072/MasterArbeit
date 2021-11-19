@@ -5,10 +5,6 @@ from sklearn.datasets import load_breast_cancer
 # User defined functions
 from db_simulator import simulate_n_databases_with_equal_sample_size
 
-# Data preparation
-import pandas as pd
-from sklearn.model_selection import train_test_split
-
 # Classifier
 from sklearn.ensemble import AdaBoostClassifier
 
@@ -16,7 +12,6 @@ from sklearn.ensemble import AdaBoostClassifier
 from evaluation import evaluate
 
 # Reference
-from ref.database import Database
 from ref.combiner import CombinedAdaBoostClassifier
 
 # Utils
@@ -25,102 +20,95 @@ import time
 data = load_breast_cancer()
 
 # Settings
-n_db = 5
+list_of_n = [1, 2, 5, 10, 20, 50, 100]
+# n_db = 5
 test_size = 0.2
-#
+n_estimators = 20
 
-# Simulate n DBs with equal sample size
+# Simulate n DBs for n = [1, 2, 5, 10, 20, 50, 100]
 prepared_data = simulate_n_databases_with_equal_sample_size(
-    data=data, n_db=n_db, test_size=test_size)
+    data=data,
+    list_of_n=list_of_n,
+    test_size=test_size
+)
 
-# print(type(prepared_data.get('db_list')[0]))
+# Initialize
+res = list()
+timer_list = list()
 
-########
-print()
-print("Non-Federated Model")
-len_data = len(data.get("data"))
-print("Number of data points: " + str(len_data))
-len_test = int(len_data * test_size)
-print("Number of data points in test database: " + str(len_test))
+# Count of data points for global train and test sets
+# len_data = len(data.get("data"))
+# len_test = len_data*test_size
 
-# db_central is the "Database" object representing the database with data centralization.
-db_central = prepared_data.get("db_central")
-
-# Train a central model using centralized data.
-classifier_central = AdaBoostClassifier()
-classifier_central.fit(X=db_central.x, y=db_central.y)
-
-# Output the performance measure of the central model.
-score_central = classifier_central.score(prepared_data.get("test_set").get(
-    "X_test"), prepared_data.get("test_set").get("y_test"))
-
-print()
-print("Non-Federated Model Score")
-print(str(round(score_central, 5)))
-########
+# Extract test set from prepared data
+X_test = prepared_data.get("test_set").get("X_test")
+y_test = prepared_data.get("test_set").get("y_test")
 
 # Print title
 print()
 print("Federation Non-iterative not Weighted")
 
 # Initialize
-res = list()
-timer_list = list()
-db_list = prepared_data.get("db_list")
+# res = list()
+res_f_1 = list()
+res_mcc = list()
+res_auc = list()
+res_acc = list()  # Score Containers
 
-# Start timer
-# print("n_db\tscore\tduration in seconds")
-timer_start = time.time()
+timer_list = list()  # Timers
 
-# Instantiate classifier
-classifier_fed_aggregated = CombinedAdaBoostClassifier(
-    learning_rate=1.,
-    n_estimators=20,
-    algorithm='SAMME.R',
-    random_state=6,
-    patients_batch_size=1,
-    weight_databases=False
-)
+# n DBs for n = [1, 2, 5, 10, 20, 50, 100]
+list_of_n_dbs = prepared_data.get("list_of_n_dbs")
 
+# Granularity of sites
+# list_of_n = list_of_n
 
-# Collect all estimators
-for i in range(0, len(db_list)):
-    # Data Structure of "db_list": [[Database], [Database], ..., [Database]]
-    # Data Structure of "db": [Database]
-    db = db_list[i]
-    classifier_fed_aggregated.add_fit(db)
+print("n Databases\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
 
-# Stop timer
-timer_stop = time.time()
-duration = timer_stop - timer_start
-
-'''
-# Basic scoring
-score_federated = classifier_fed_aggregated.score(
-    X=prepared_data.get("test_set").get("X_test"),
-    y=prepared_data.get("test_set").get("y_test")
-)
-
-print(
-    str(len(db_list)) +
-    "\t" +
-    str(round(score_federated, 5)) +
-    "\t" +
-    str(duration)
-)
+# Print title
 print()
-'''
+print("Federation Non-iterative not Weighted")
 
+for n_dbs in range(0, len(list_of_n_dbs)):
+    # n_dbs = n_dbs  # n sites / DBs for a given n
 
-print(f'Training Time: {duration} seconds. ')
-print()
+    # Start timer
+    timer_start = time.time()
 
-X_test = prepared_data.get("test_set").get("X_test")
-y_test = prepared_data.get("test_set").get("y_test")
+    # Instantiate classifier
+    classifier_fed_aggregated = CombinedAdaBoostClassifier(
+        n_estimators=n_estimators,
+        learning_rate=1.,
+        algorithm='SAMME.R',
+        random_state=6,
+        patients_batch_size=1,
+        weight_databases=False
+    )
 
-f_1, mcc, auc, acc = evaluate(classifier_fed_aggregated, X_test, y_test)
+    # Collect all estimators
+    for db in list_of_n_dbs[n_dbs]:
+        classifier_fed_aggregated.add_fit(db)
 
-print(f'F-1 Score: {f_1}')
-print(f'MCC Score: {mcc}')
-print(f'AUC Score: {auc}')
-print(f'ACC Score: {acc}')
+    # Stop timer
+    timer_stop = time.time()
+    duration = timer_stop - timer_start
+
+    f_1, mcc, auc, acc = evaluate(classifier_fed_aggregated, X_test, y_test)
+    res_f_1.append(f_1)
+    res_mcc.append(mcc)
+    res_auc.append(auc)
+    res_acc.append(acc)
+
+    print(
+        str(list_of_n[n_dbs]) +
+        "\t\t\t" +
+        str(f_1) +
+        "\t" +
+        str(round(mcc, 2)) +
+        "\t\t" +
+        str(round(auc, 2)) +
+        "\t\t" +
+        str(round(acc, 2)) +
+        "\t\t" +
+        str(timer_list[n_dbs])
+    )
