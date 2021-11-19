@@ -45,8 +45,8 @@ X_test = prepared_data.get("test_set").get("X_test")
 y_test = prepared_data.get("test_set").get("y_test")
 
 # Print title
-print()
 print("Federation Non-iterative not Weighted")
+print()
 
 # Initialize
 # res = list()
@@ -64,10 +64,6 @@ list_of_n_dbs = prepared_data.get("list_of_n_dbs")
 # list_of_n = list_of_n
 
 print("n Databases\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
-
-# Print title
-print()
-print("Federation Non-iterative not Weighted")
 
 for n_dbs in range(0, len(list_of_n_dbs)):
     # n_dbs = n_dbs  # n sites / DBs for a given n
@@ -91,7 +87,7 @@ for n_dbs in range(0, len(list_of_n_dbs)):
 
     # Stop timer
     timer_stop = time.time()
-    duration = timer_stop - timer_start
+    timer_list.append(timer_stop - timer_start)
 
     f_1, mcc, auc, acc = evaluate(classifier_fed_aggregated, X_test, y_test)
     res_f_1.append(f_1)
@@ -101,7 +97,7 @@ for n_dbs in range(0, len(list_of_n_dbs)):
 
     print(
         str(list_of_n[n_dbs]) +
-        "\t\t\t" +
+        "\t\t" +
         str(f_1) +
         "\t" +
         str(round(mcc, 2)) +
