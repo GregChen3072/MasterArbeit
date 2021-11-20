@@ -37,7 +37,7 @@ def simulate_1_database_with_all_data_centralized():
     return X, y
 
 
-def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), list_of_n=[1], test_size=0.2):
+def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), test_size=0.2, list_of_n=[1]):
     X_train, X_test, y_train, y_test = train_test_split(
         data.get("data"), data.get("target"), test_size=test_size, random_state=6)
 
@@ -96,45 +96,6 @@ def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), list_
         "list_of_n": list_of_n
     }
     return prepared_data
-
-
-def _obsolete_simulate_n_databases_with_equal_sample_size(df_train_set: pd.DataFrame, n: int):
-    '''
-        Calling this function will simulate n databases with equal sample sizes based on the sklearn dataset for binary classification. 
-        Input: DataFrame object; n
-        Ouput: List of DataFrame objects. 
-
-        Set n = {1, 2, 5, 10, 20, 50, 100}. 
-        #samples in each site = population size / n
-        Range of n = [2, 100] (specified in the drafted paper. )
-    '''
-    # Load data of binary classification as pandas dataframe.
-    df = df_train_set
-
-    # Set number of databases.
-    n_db = n
-    # Define an empty list which will be filled with dataframes as list elements.
-    # Each list element represents a database at a certain site / hospital.
-    db_list = []
-    n_samples_per_db = int(len(df) / n_db)
-
-    # Divide the population in n parts.
-    for i in range(0, n_db):
-        db_i = df.sample(n=n_samples_per_db, replace=False, random_state=1)
-        db_list.append(db_i)
-        # Sampling without replacement
-        df.drop(db_i.index)
-
-    # Check class balance after sampling
-    for i, db in enumerate(db_list):
-        # Print ratio p / n for each db.
-        print(
-            f'The P/N Ratio of DB {i+1}: ',
-            db.target.value_counts()[1] / db.target.value_counts()[0],
-            f' and the sample size: {len(db)}'
-        )
-
-    return db_list
 
 
 def simulate_db_size_imbalance(data=load_breast_cancer(), test_size=0.2, balance_step=0.05, k: int = 1):
@@ -207,3 +168,42 @@ def run_proto(n_estimators, test_size):
     # calculate and print model accuracy
     print("AdaBoost Classifier Model Accuracy:",
           accuracy_score(y_test, y_pred))
+
+
+def _obsolete_simulate_n_databases_with_equal_sample_size(df_train_set: pd.DataFrame, n: int):
+    '''
+        Calling this function will simulate n databases with equal sample sizes based on the sklearn dataset for binary classification. 
+        Input: DataFrame object; n
+        Ouput: List of DataFrame objects. 
+
+        Set n = {1, 2, 5, 10, 20, 50, 100}. 
+        #samples in each site = population size / n
+        Range of n = [2, 100] (specified in the drafted paper. )
+    '''
+    # Load data of binary classification as pandas dataframe.
+    df = df_train_set
+
+    # Set number of databases.
+    n_db = n
+    # Define an empty list which will be filled with dataframes as list elements.
+    # Each list element represents a database at a certain site / hospital.
+    db_list = []
+    n_samples_per_db = int(len(df) / n_db)
+
+    # Divide the population in n parts.
+    for i in range(0, n_db):
+        db_i = df.sample(n=n_samples_per_db, replace=False, random_state=1)
+        db_list.append(db_i)
+        # Sampling without replacement
+        df.drop(db_i.index)
+
+    # Check class balance after sampling
+    for i, db in enumerate(db_list):
+        # Print ratio p / n for each db.
+        print(
+            f'The P/N Ratio of DB {i+1}: ',
+            db.target.value_counts()[1] / db.target.value_counts()[0],
+            f' and the sample size: {len(db)}'
+        )
+
+    return db_list
