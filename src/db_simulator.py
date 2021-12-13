@@ -35,10 +35,6 @@ def simulate_1_database_with_all_data_centralized():
 
 
 def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test, list_of_n=[1]):
-    test_set = {"X_test": X_test, "y_test": y_test}
-
-    db_central = make_database(X_train, y_train)
-
     # List of db_list
     # Define an empty list which will be filled with dataframes as list elements.
     # Each list element represents a database at a certain site / hospital.

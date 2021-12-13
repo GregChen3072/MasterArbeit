@@ -56,16 +56,17 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
             # estimators
             self.estimators_.extend(self.list_of_ada_booster[-1].estimators_)
 
-            # You're actually add & adjusting / updating databases weights after each batch!
+            # You're actually add & adjusting / updating databases weights after each batch.
             # Not necessary for n-sites evaluation because all dbs have equal weights.
-
-            list_of_databases_weights, n_evaluated_batches = self.__add_database_weight(
-                list_of_databases_weights=self.list_of_databases_weights,
-                database=database,
-                n_evaluated_batches=self.n_evaluated_batches,
-                batch_size=self.patients_batch_size)
-            self.list_of_databases_weights = list_of_databases_weights
-            self.n_evaluated_batches = n_evaluated_batches
+            # Therefore: Only executed when self.weight_databases is set to True.
+            if self.weight_databases:
+                list_of_databases_weights, n_evaluated_batches = self.__add_database_weight(
+                    list_of_databases_weights=self.list_of_databases_weights,
+                    database=database,
+                    n_evaluated_batches=self.n_evaluated_batches,
+                    batch_size=self.patients_batch_size)
+                self.list_of_databases_weights = list_of_databases_weights
+                self.n_evaluated_batches = n_evaluated_batches
 
             # estimators weights
             # make ESTIMATOR WEIGHTS

@@ -41,41 +41,39 @@ def pipeline_2_1(X_train, X_test, y_train, y_test):
     # len_data = len(data.get("data"))
     # len_test = len_data*test_size
 
-    # Print title
-    print("N Sites Combined")
-    print()
-
     # Initialize
-    # res = list()
     res_f_1 = list()
     res_mcc = list()
     res_auc = list()
     res_acc = list()  # Score Containers
 
-    timer_list = list()  # Timers
-
     # Granularity of sites
     # list_of_n = list_of_n
 
+    # Print title
+    print("N Sites Combined")
+    print()
+
     print("n Databases\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
 
-    for n_dbs in range(0, len(list_of_n_dbs)):
-        # n_dbs = n_dbs  # n sites / DBs for a given n
+    for i_n_dbs in range(0, len(list_of_n_dbs)):
+        # i_n_dbs = i_n_dbs  # n sites / DBs for a given n
 
         # Instantiate classifier
         classifier_fed_aggregated = CombinedAdaBoostClassifier(
-            n_estimators=int(n_estimators/list_of_n[n_dbs]),
+            n_estimators=int(n_estimators/list_of_n[i_n_dbs]),
             learning_rate=1.,
             algorithm='SAMME.R',
             random_state=6,
             patients_batch_size=1,
+            # For n sites evaluation, all sites have equal weights, no need to weigh by the sizes of db
             weight_databases=False
         )
 
         # Collect all estimators / sending estimators to the central
         timer_max = 0
 
-        for db in list_of_n_dbs[n_dbs]:
+        for db in list_of_n_dbs[i_n_dbs]:
             # Start timer
             timer_start = time.time()
 
@@ -87,6 +85,7 @@ def pipeline_2_1(X_train, X_test, y_train, y_test):
 
             timer_actual = timer_stop - timer_start
 
+            # The communication efficiency of a combined model depends on the slowest site.
             if timer_max <= timer_actual:
                 timer_max = timer_actual
 
@@ -100,7 +99,7 @@ def pipeline_2_1(X_train, X_test, y_train, y_test):
         res_acc.append(acc)
 
         print(
-            str(list_of_n[n_dbs]) +
+            str(list_of_n[i_n_dbs]) +
             "\t\t" +
             str(f_1) +
             "\t" +
@@ -110,5 +109,5 @@ def pipeline_2_1(X_train, X_test, y_train, y_test):
             "\t\t" +
             str(round(acc, 2)) +
             "\t\t" +
-            str(timer_list[n_dbs])
+            str(timer_list[i_n_dbs])
         )

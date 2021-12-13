@@ -112,6 +112,7 @@ n_visits = int(1)
 print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
 
 for i in range(0, len(db_pairs)):
+
     db_pair = db_pairs[i]
 
     timer_start = time.time()

@@ -15,6 +15,7 @@ from ref.database import Database
 
 from pipeline_1_1 import pipeline_1_1
 from pipeline_2_1 import pipeline_2_1
+from pipeline_3_1 import pipeline_3_1
 
 import pickle
 
@@ -30,7 +31,7 @@ sss = StratifiedShuffleSplit(n_splits=3, test_size=0.2, random_state=6)
 sss.get_n_splits(X, y)
 
 # Settings
-n_estimators = 100
+n_estimators = 1000
 
 # Container of results of 1000 repetitions
 result_container = None
@@ -45,14 +46,14 @@ for train_index, test_index in sss.split(X, y):
 
     # Pipeline 1 1
     # When all data centralized in one database.
-    pipeline_1_1(X_train, X_test, y_train, y_test)
+    # pipeline_1_1(X_train, X_test, y_train, y_test)
 
     # Pipeline 2 1
-    pipeline_2_1(X_train, X_test, y_train, y_test)
+    #pipeline_2_1(X_train, X_test, y_train, y_test)
     '''save results'''
 
     # Pipeline 3 1
-    # pipeline_1_1(X_train, X_test, y_train, y_test)
+    pipeline_3_1(X_train, X_test, y_train, y_test)
 
     # Pipeline 1 2
     # Doesn't exist.
