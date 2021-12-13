@@ -6,7 +6,7 @@ from sklearn.datasets import load_breast_cancer
 from db_simulator import simulate_db_size_imbalance
 
 # Model Evaluation
-from evaluation import evaluate
+from scoring import make_scores
 
 # Reference
 from ref.next_n_size import NextN
@@ -129,7 +129,7 @@ for i in range(0, len(db_pairs)):
     timer_list.append(timer_stop - timer_start)
     # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
-    f_1, mcc, auc, acc = evaluate(classifier_iterative, X_test, y_test)
+    f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
     res_f_1.append(f_1)
     res_mcc.append(mcc)
     res_auc.append(auc)

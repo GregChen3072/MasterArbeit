@@ -16,7 +16,7 @@ from sklearn.model_selection import StratifiedShuffleSplit, cross_val_score, cro
 from sklearn.ensemble import AdaBoostClassifier
 
 from ref.database import Database
-from evaluation import evaluate
+from scoring import make_scores
 
 import pickle
 
@@ -81,7 +81,7 @@ for train_index, test_index in sss.split(X, y):
     y_train, y_test = y[train_index], y[test_index]
 
     clf_classical = clf.fit(X_train, y_train)
-    f_1, mcc, auc, acc = evaluate(clf_classical, X_test, y_test)
+    f_1, mcc, auc, acc = make_scores(clf_classical, X_test, y_test)
 
     list_of_classifiers.append(clf_classical)
     list_of_acc.append(acc)  # 1000 elements

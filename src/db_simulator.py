@@ -8,9 +8,6 @@ from sklearn.metrics import accuracy_score
 import pandas as pd
 import numpy as np
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-
 from ref.database import Database
 from ref.main import make_iterative_classifier
 from ref.main import make_not_iterative_classifier
@@ -37,17 +34,10 @@ def simulate_1_database_with_all_data_centralized():
     return X, y
 
 
-def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), test_size=0.2, list_of_n=[1]):
-    X_train, X_test, y_train, y_test = train_test_split(
-        data.get("data"), data.get("target"), test_size=test_size, random_state=6)
-
+def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test, list_of_n=[1]):
     test_set = {"X_test": X_test, "y_test": y_test}
 
     db_central = make_database(X_train, y_train)
-
-    # Convert arrays into df and get ready for sampling without replacement.
-    df_train_set = pd.DataFrame(data=X_train)
-    df_train_set['target'] = y_train
 
     # List of db_list
     # Define an empty list which will be filled with dataframes as list elements.
@@ -65,9 +55,14 @@ def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), test_
 
     # list_of_n = [1, 2, 5, 10, 20, 50, 100]
     for n in list_of_n:
+        # Convert arrays into df and get ready for sampling without replacement.
+        df_train_set = pd.DataFrame(data=X_train)
+        df_train_set['target'] = y_train
+
         # Set number of databases.
         n_dbs = list()
 
+        # sample size = 1 / n
         n_samples_per_db = int(len(y_train) / n)
 
         # Construct a list of DBs containing n times DB
@@ -89,12 +84,8 @@ def simulate_n_databases_with_equal_sample_size(data=load_breast_cancer(), test_
 
         list_of_n_dbs.append(n_dbs)
 
-    prepared_data = {
-        "db_central": db_central,
-        "list_of_n_dbs": list_of_n_dbs,
-        "test_set": test_set,
-        "list_of_n": list_of_n
-    }
+    prepared_data = list_of_n_dbs
+
     return prepared_data
 
 

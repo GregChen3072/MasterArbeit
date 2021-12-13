@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier
 
 # Model Evaluation
-from evaluation import evaluate
+from scoring import make_scores
 
 # Reference
 from ref.database import Database
@@ -118,7 +118,7 @@ print()
 X_test = prepared_data.get("test_set").get("X_test")
 y_test = prepared_data.get("test_set").get("y_test")
 
-f_1, mcc, auc, acc = evaluate(classifier_fed_aggregated, X_test, y_test)
+f_1, mcc, auc, acc = make_scores(classifier_fed_aggregated, X_test, y_test)
 
 print(f'F-1 Score: {f_1}')
 print(f'MCC Score: {mcc}')

@@ -1,12 +1,111 @@
-# Model Evaluation
-from sklearn.metrics import balanced_accuracy_score, roc_auc_score, matthews_corrcoef, f1_score
+# Load population
+import pandas as pd
+
+from sklearn.datasets import load_breast_cancer
+
+# For computing multiple metrics
+from sklearn.metrics import make_scorer
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, roc_auc_score, matthews_corrcoef, f1_score
+
+from sklearn.model_selection import StratifiedShuffleSplit, cross_val_score, cross_validate
+
+from sklearn.ensemble import AdaBoostClassifier
+
+from ref.database import Database
+
+from pipeline_1_1 import pipeline_1_1
+from pipeline_2_1 import pipeline_2_1
+
+import pickle
 
 
-def evaluate(model, X_test, y_test):
-    y_pred = model.predict(X_test)
-    f_1 = f1_score(y_test, y_pred, average=None)
-    mcc = matthews_corrcoef(y_test, y_pred)
-    auc = roc_auc_score(y_test, y_pred, average=None)
-    acc = balanced_accuracy_score(y_test, y_pred)
+def make_database(x, y):
+    return Database(x, y)
 
-    return f_1, mcc, auc, acc
+
+X, y = load_breast_cancer(return_X_y=True)
+
+# sss = StratifiedShuffleSplit(n_splits=1000, test_size=0.2, random_state=6)
+sss = StratifiedShuffleSplit(n_splits=3, test_size=0.2, random_state=6)
+sss.get_n_splits(X, y)
+
+# Settings
+n_estimators = 100
+
+# Container of results of 1000 repetitions
+result_container = None
+
+# Create 1000 Validation Sets
+for train_index, test_index in sss.split(X, y):
+    # print("TRAIN:", train_index)
+    # print("TEST:", test_index)
+
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    # Pipeline 1 1
+    # When all data centralized in one database.
+    pipeline_1_1(X_train, X_test, y_train, y_test)
+
+    # Pipeline 2 1
+    pipeline_2_1(X_train, X_test, y_train, y_test)
+    '''save results'''
+
+    # Pipeline 3 1
+    # pipeline_1_1(X_train, X_test, y_train, y_test)
+
+    # Pipeline 1 2
+    # Doesn't exist.
+    # None
+
+    # Pipeline 2 2 weighted
+    #
+
+    # Pipeline 3 2 weighted
+    #
+
+    # Pipeline 2 2 unweighted?
+    #
+
+    # Pipeline 3 2 unweighted?
+    #
+
+    # Pipeline 1 3
+    # Class imbalance under construction.
+    # pipeline_1_3(X_train, X_test, y_train, y_test)
+
+    # Pipeline 2 3
+    # Make sense?
+
+    # Pipeline 3 3
+    # Make sense?
+
+    # Pack up test set
+    # Split train set into n sites | split 10 DB pairs | simulate 10 sites with class imbalance
+
+    # Train classical | combiner | iterator using train set
+    # Test  classical | combiner | iterator using test  set
+    # Get   acc | auc | mcc | f-1   scores for each validation
+
+# clf = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=6)
+
+'''
+# Collect results
+res = {
+    'classifier': 'classifier',
+    'acc': 'acc',
+    'auc': 'auc',
+    'mcc': 'mcc',
+    'f-1': 'f-1'
+}
+
+
+# https://scikit-learn.org/stable/modules/model_evaluation.html#multimetric-scoring
+# scoring = ['precision_macro', 'recall_macro']
+scoring = {
+    'acc': 'balanced_accuracy',
+    'auc': 'roc_auc',
+    'mcc': make_scorer(matthews_corrcoef),
+    'f-1': 'f1'
+}
+'''

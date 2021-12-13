@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier
 
 # Model Evaluation
-from evaluation import evaluate
+from scoring import make_scores
 
 # Reference
 from ref.main import make_iterative_classifier
@@ -78,7 +78,7 @@ for i in range(0, len(db_pairs)):
     timer_stop = time.time()
     timer_list.append(timer_stop - timer_start)
     # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
-    f_1, mcc, auc, acc = evaluate(classifier_combined, X_test, y_test)
+    f_1, mcc, auc, acc = make_scores(classifier_combined, X_test, y_test)
     res_f_1.append(f_1)
     res_mcc.append(mcc)
     res_auc.append(auc)
