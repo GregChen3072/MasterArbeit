@@ -44,16 +44,15 @@ for train_index, test_index in sss.split(X, y):
     X_train, X_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
 
-    # Pipeline 1 1
+    # Pipeline 1 1 (implementation completed)
     # When all data centralized in one database.
     # pipeline_1_1(X_train, X_test, y_train, y_test)
 
-    # Pipeline 2 1
-    #pipeline_2_1(X_train, X_test, y_train, y_test)
-    '''save results'''
+    # Pipeline 2 1 (implementation completed)
+    # pipeline_2_1(X_train, X_test, y_train, y_test)
 
-    # Pipeline 3 1
-    pipeline_3_1(X_train, X_test, y_train, y_test)
+    # Pipeline 3 1 (implementation completed)
+    # pipeline_3_1(X_train, X_test, y_train, y_test)
 
     # Pipeline 1 2
     # Doesn't exist.

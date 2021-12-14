@@ -13,6 +13,26 @@ from scoring import make_scores
 # Utils
 import time
 
+# https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html
+
+'''
+sampling_strategy: float, str, dict or callable, default=auto
+When float, it corresponds to the desired ratio of the number of samples in the minority class 
+over the number of samples in the majority class after resampling. 
+
+Therefore, the ratio is expressed as alpha_{os} = N_{rm} / N_{M} 
+    where N_{rm} is the number of samples in the minority class after resampling 
+    and   N_{M}  is the number of samples in the majority class.
+
+Warning: float is only available for binary classification. An error is raised for multi-class classification.
+
+'''
+
+
+def pipeline_1_3(X_train, X_test, y_train, y_test):
+
+    pass
+
 
 X, y = simulate_1_database_with_all_data_centralized()
 
