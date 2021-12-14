@@ -43,6 +43,15 @@ def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test
     # Define an empty list which will be filled with dataframes as list elements.
     # Each list element represents a database at a certain site / hospital.
     '''
+        Calling this function will simulate n databases with equal sample sizes based on the sklearn dataset for binary classification. 
+        Input: DataFrame object; n
+        Ouput: List of DataFrame objects. 
+
+        Set n = {1, 2, 5, 10, 20, 50, 100}. 
+        #samples in each site = population size / n
+        Range of n = [2, 100] (specified in the drafted paper. )
+    '''
+    '''
         Structure: 
         db_list = [
             [db_obj_1], 
@@ -135,18 +144,39 @@ def simulate_class_imbalance():
         ...
         P 90% vs N 10%
     '''
-    X, y = make_classification(n_classes=2, class_sep=2,
-                               weights=[0.1, 0.9], n_informative=3, n_redundant=1, flip_y=0,
-                               n_features=20, n_clusters_per_class=1, n_samples=1000, random_state=10)
+    # Simulate a random data set with binary class imbalance.
+    X, y = make_classification(
+        n_classes=2,
+        class_sep=2,
+        weights=[0.05, 0.95],
+        n_informative=3,
+        n_redundant=1,
+        flip_y=0,
+        n_features=20,
+        n_clusters_per_class=1,
+        n_samples=1000,
+        random_state=10
+    )
 
     print('Original dataset shape %s' % Counter(y))
 
+    # When float, it corresponds to the desired ratio
+    # of the number of samples in the minority class
+    # over the number of samples in the majority class after resampling.
+
+    # Therefore, the ratio is expressed as: alpha = N_rm / N_M
+
+    list_of_N_rm = [1, 2, 3, 4, 5]
+    N_rm = 1  # the number of samples in the minority class after resampling
+    N_M = 10 - N_rm  # the number of samples in the majority class.
+
     sm = SMOTE(
-        # sampling_strategy=float,
-        # k_neighbors=5,
-        # n_jobs=-1,
+        sampling_strategy=float(N_rm/N_M),  # when P 50% vs N 50%
+        k_neighbors=5,
+        n_jobs=-1,
         random_state=6
     )
+
     X_res, y_res = sm.fit_resample(X, y)
 
     print('Resampled dataset shape %s' % Counter(y_res))
@@ -173,42 +203,3 @@ def run_proto(n_estimators, test_size):
     # calculate and print model accuracy
     print("AdaBoost Classifier Model Accuracy:",
           accuracy_score(y_test, y_pred))
-
-
-def _obsolete_simulate_n_databases_with_equal_sample_size(df_train_set: pd.DataFrame, n: int):
-    '''
-        Calling this function will simulate n databases with equal sample sizes based on the sklearn dataset for binary classification. 
-        Input: DataFrame object; n
-        Ouput: List of DataFrame objects. 
-
-        Set n = {1, 2, 5, 10, 20, 50, 100}. 
-        #samples in each site = population size / n
-        Range of n = [2, 100] (specified in the drafted paper. )
-    '''
-    # Load data of binary classification as pandas dataframe.
-    df = df_train_set
-
-    # Set number of databases.
-    n_db = n
-    # Define an empty list which will be filled with dataframes as list elements.
-    # Each list element represents a database at a certain site / hospital.
-    db_list = []
-    n_samples_per_db = int(len(df) / n_db)
-
-    # Divide the population in n parts.
-    for i in range(0, n_db):
-        db_i = df.sample(n=n_samples_per_db, replace=False, random_state=1)
-        db_list.append(db_i)
-        # Sampling without replacement
-        df.drop(db_i.index)
-
-    # Check class balance after sampling
-    for i, db in enumerate(db_list):
-        # Print ratio p / n for each db.
-        print(
-            f'The P/N Ratio of DB {i+1}: ',
-            db.target.value_counts()[1] / db.target.value_counts()[0],
-            f' and the sample size: {len(db)}'
-        )
-
-    return db_list
