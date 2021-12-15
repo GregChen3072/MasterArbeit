@@ -17,6 +17,10 @@ from pipeline_1_1 import pipeline_1_1
 from pipeline_2_1 import pipeline_2_1
 from pipeline_3_1 import pipeline_3_1
 
+# from pipeline_2_2 import pipeline_2_2
+from pipeline_3_2 import pipeline_3_2
+
+
 import pickle
 
 
@@ -58,17 +62,17 @@ for train_index, test_index in sss.split(X, y):
     # Doesn't exist.
     # None
 
-    # Pipeline 2 2 weighted
-    #
+    # Pipeline 2 2 unweighted
+    # pipeline_2_2(X_train, X_test, y_train, y_test)
 
-    # Pipeline 3 2 weighted
-    #
+    # Pipeline 3 2 unweighted
+    pipeline_3_2(X_train, X_test, y_train, y_test)
 
-    # Pipeline 2 2 unweighted?
-    #
+    # Pipeline 2 2 weighted?
+    # pipeline_2_2(X_train, X_test, y_train, y_test)
 
-    # Pipeline 3 2 unweighted?
-    #
+    # Pipeline 3 2 weighted?
+    # pipeline_3_2(X_train, X_test, y_train, y_test)
 
     # Pipeline 1 3
     # Class imbalance under construction.

@@ -98,7 +98,7 @@ def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test
     return prepared_data
 
 
-def simulate_db_size_imbalance(data=load_breast_cancer(), test_size=0.2, balance_step=0.05, k: int = 1):
+def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step=0.05, k: int = 1):
     '''
         Interval: 5%
         5%  vs 95%
@@ -108,14 +108,6 @@ def simulate_db_size_imbalance(data=load_breast_cancer(), test_size=0.2, balance
         50% vs 50%
         DB * 10
     '''
-    x_train, x_test, y_train, y_test = train_test_split(
-        data.get("data"),
-        data.get("target"),
-        test_size=test_size
-    )
-    test = {"X": x_test, "y": y_test}
-
-    db_whole = make_database(x_train, y_train)
 
     db_pairs = list()
     balance_list = list()
@@ -129,10 +121,10 @@ def simulate_db_size_imbalance(data=load_breast_cancer(), test_size=0.2, balance
             db_pairs.append([db_1, db_2])
             balance_list.append(balance_size)
 
-    res = {"db_whole": db_whole,
-           "db_pairs": db_pairs,
-           "test": test,
-           "balance_list": balance_list}
+    res = {
+        "db_pairs": db_pairs,
+        "balance_list": balance_list
+    }
 
     return res
 

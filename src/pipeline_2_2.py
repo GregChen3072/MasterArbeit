@@ -25,6 +25,10 @@ from ref.combiner import CombinedAdaBoostClassifier
 import time
 
 
+def pipeline_2_2(X_train, X_test, y_train, y_test):
+    pass
+
+
 data = load_breast_cancer()
 
 # Settings
@@ -38,13 +42,6 @@ prepared_data = simulate_db_size_imbalance(
     balance_step=0.05,
     k=1
 )
-
-len_data = len(data.get("data"))
-len_test = len_data*test_size
-
-# Extract Test Set (20%)
-X_test = prepared_data.get("test").get("X")
-y_test = prepared_data.get("test").get("y")
 
 # Print title
 print()
@@ -75,6 +72,7 @@ for i in range(0, len(db_pairs)):
     classifier_combined = make_not_iterative_classifier(databases=db_pair,
                                                         patients_batch_size=1,
                                                         weight_databases=False)
+
     timer_stop = time.time()
     timer_list.append(timer_stop - timer_start)
     # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
