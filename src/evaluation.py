@@ -17,8 +17,8 @@ from pipeline_1_1 import pipeline_1_1
 from pipeline_2_1 import pipeline_2_1
 from pipeline_3_1 import pipeline_3_1
 
-from pipeline_2_2 import pipeline_2_2
-from pipeline_3_2 import pipeline_3_2
+from pipeline_2_2 import pipeline_2_2_unweighted
+from pipeline_3_2 import pipeline_3_2_unweighted
 
 
 import pickle
@@ -31,7 +31,7 @@ def make_database(x, y):
 X, y = load_breast_cancer(return_X_y=True)
 
 # sss = StratifiedShuffleSplit(n_splits=1000, test_size=0.2, random_state=6)
-sss = StratifiedShuffleSplit(n_splits=3, test_size=0.2, random_state=6)
+sss = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=6)
 sss.get_n_splits(X, y)
 
 # Settings
@@ -63,26 +63,16 @@ for train_index, test_index in sss.split(X, y):
     # None
 
     # Pipeline 2 2 unweighted
-    pipeline_2_2(X_train, X_test, y_train, y_test)
+    # pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 unweighted
-    # pipeline_3_2(X_train, X_test, y_train, y_test)
+    pipeline_3_2_unweighted(X_train, X_test, y_train, y_test)
 
-    # Pipeline 2 2 weighted?
-    # pipeline_2_2(X_train, X_test, y_train, y_test)
+    # Pipeline 2 2 weighted
+    # pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
 
-    # Pipeline 3 2 weighted?
-    # pipeline_3_2(X_train, X_test, y_train, y_test)
-
-    # Pipeline 1 3
-    # Class imbalance under construction.
-    # pipeline_1_3(X_train, X_test, y_train, y_test)
-
-    # Pipeline 2 3
-    # Make sense?
-
-    # Pipeline 3 3
-    # Make sense?
+    # Pipeline 3 2 weighted
+    # pipeline_3_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pack up test set
     # Split train set into n sites | split 10 DB pairs | simulate 10 sites with class imbalance
@@ -92,24 +82,3 @@ for train_index, test_index in sss.split(X, y):
     # Get   acc | auc | mcc | f-1   scores for each validation
 
 # clf = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=6)
-
-'''
-# Collect results
-res = {
-    'classifier': 'classifier',
-    'acc': 'acc',
-    'auc': 'auc',
-    'mcc': 'mcc',
-    'f-1': 'f-1'
-}
-
-
-# https://scikit-learn.org/stable/modules/model_evaluation.html#multimetric-scoring
-# scoring = ['precision_macro', 'recall_macro']
-scoring = {
-    'acc': 'balanced_accuracy',
-    'auc': 'roc_auc',
-    'mcc': make_scorer(matthews_corrcoef),
-    'f-1': 'f1'
-}
-'''

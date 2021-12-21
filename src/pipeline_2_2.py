@@ -14,7 +14,9 @@ from ref.combiner import CombinedAdaBoostClassifier
 import time
 
 
-def pipeline_2_2(X_train, X_test, y_train, y_test):
+def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
+
+    n_estimators = 100
 
     # Simulate n DB pairs with decreasing sample size imbalance
     prepared_data = simulate_db_size_imbalance(
@@ -48,10 +50,17 @@ def pipeline_2_2(X_train, X_test, y_train, y_test):
 
         timer_start = time.time()
 
-        # Setting: weighing or not (weight_databases=False / True)
-        classifier_combined = make_not_iterative_classifier(databases=db_pair,
-                                                            patients_batch_size=1,
-                                                            weight_databases=False)
+        classifier = CombinedAdaBoostClassifier(
+            base_estimator=None,
+            learning_rate=1.,
+            n_estimators=int(n_estimators/2),
+            algorithm='SAMME.R',
+            random_state=6,
+            patients_batch_size=1,
+            weight_databases=False
+        )
+
+        classifier_combined = classifier.make_fit(db_pair)
 
         timer_stop = time.time()
         timer_list.append(timer_stop - timer_start)

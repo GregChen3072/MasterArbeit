@@ -19,10 +19,10 @@ from ref.main import make_iterative_classifier
 import time
 
 
-def pipeline_3_2(X_train, X_test, y_train, y_test):
+def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test):
     # Settings I
-    n_estimators = 1000
-    n_db = 10
+    n_estimators = 100
+    n_db = 2
     n_iteration = 5
 
     n_batch_size = int(n_estimators / (n_db * n_iteration))
