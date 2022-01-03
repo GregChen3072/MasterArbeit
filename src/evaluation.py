@@ -63,13 +63,13 @@ for train_index, test_index in sss.split(X, y):
     # None
 
     # Pipeline 2 2 unweighted
-    # pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
+    pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 unweighted
     # pipeline_3_2_unweighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 2 2 weighted
-    pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
+    # pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 weighted
     # pipeline_3_2_weighted(X_train, X_test, y_train, y_test)
@@ -80,5 +80,3 @@ for train_index, test_index in sss.split(X, y):
     # Train classical | combiner | iterator using train set
     # Test  classical | combiner | iterator using test  set
     # Get   acc | auc | mcc | f-1   scores for each validation
-
-# clf = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=6)

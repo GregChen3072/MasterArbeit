@@ -92,13 +92,27 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
         if len(list_of_databases) == 0:
             raise Exception("There are no databases.")
 
+        training_duration_max = 0
+        duration_list = []
+
         # Make ada booster
         list_of_ada_booster = []
         for database in list_of_databases:
             # if database is not Database:
             #    raise Exception("This is not an Database: " + str(database))
+            timer_start = time.time()
+
             list_of_ada_booster.append(
                 database.extend_classifier(self.start_classifier))
+
+            timer_stop = time.time()
+
+            training_duration = timer_stop - timer_start
+            duration_list.append(round(training_duration, 5))
+
+            if training_duration >= training_duration_max:
+                training_duration_max = round(training_duration, 5)
+
         self.list_of_ada_booster = list_of_ada_booster
 
         # get CLASSES
@@ -153,7 +167,7 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
 
         # self.current_classifier.set_params(**set_dict)
         # self.set_params(**set_dict)
-        return self  # self.current_classifier
+        return self, duration_list, training_duration_max  # self.current_classifier
 
     def make_fit_w(self, list_of_databases):
         if len(list_of_databases) == 0:

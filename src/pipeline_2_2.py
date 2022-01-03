@@ -44,7 +44,7 @@ def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
 
-    print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
+    print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tMax\t\tDuration in Seconds")
 
     for i in range(0, len(db_pairs)):
         db_pair = db_pairs[i]
@@ -61,7 +61,8 @@ def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
             weight_databases=False
         )
 
-        classifier_combined = classifier.make_fit(db_pair)
+        classifier_combined, duration_list, training_duration_max = classifier.make_fit(
+            db_pair)
 
         # timer_stop = time.time()
         # timer_list.append(timer_stop - timer_start)
@@ -83,7 +84,9 @@ def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
             "\t\t" +
             str(round(acc, 2)) +
             "\t\t" +
-            str(timer_list[i])
+            str(training_duration_max) +
+            "\t\t" +
+            str(duration_list)
         )
 
     # return [score_whole, res, dic.get("balance_list"), time_list]
