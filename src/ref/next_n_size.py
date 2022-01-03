@@ -11,21 +11,53 @@ import numpy as np
 
 
 class NextN:
-    def __init__(self, n_size: int, n_type: str = "random", batch_size: int = 5, n_data_sets: int = None) -> None:
+    def __init__(
+        self,
+        n_size: int,
+        n_data_sets: int = None,
+        n_type: str = "random",
+        batch_size: int = 5,
+        proportion: float = 0.5,
+        n_iteration: int = 5
+    ) -> None:
         super().__init__()
+
         self.n_size = n_size
         self.n_type = n_type
         self.n_current = None
         self.batch_size = batch_size
         self.n_data_sets = n_data_sets
         self.first_ping = True
-        #print("n_type: "+str(n_type))
+
+        self.proportion = proportion
+        self.n_iteration = n_iteration
+        self.n_current_index = 1
+        # print("n_type: "+str(n_type))
 
     def __n_batch(self):
         if self.n_current is None:
             self.n_current = self.batch_size
         else:
             self.n_current = self.n_current + self.batch_size
+
+    def __n_proportional(self):
+        proportion = self.proportion
+
+        bigger_batch_size = int(
+            self.n_size * (1 - proportion) / self.n_iteration)
+        smaller_batch_size = int(
+            self.n_size * proportion / self.n_iteration)
+
+        if self.n_current is None:
+            # Size of the very first batch (Starting with the bigger database)
+            self.n_current = bigger_batch_size
+        else:
+            if self.n_current_index + 1 == self.n_data_sets:
+                self.n_current = self.n_current + smaller_batch_size
+                self.n_current_index = 0
+            else:
+                self.n_current = self.n_current + bigger_batch_size
+                self.n_current_index += 1
 
     def __n_random(self):
         if self.n_current is None:
@@ -72,6 +104,8 @@ class NextN:
             raise Exception("Already finished.")
         if self.n_type == "batch":
             self.__n_batch()
+        elif self.n_type == "proportional":
+            self.__n_proportional()
         elif self.n_type == "random":
             self.__n_random()
         elif self.n_type == "single":
@@ -111,12 +145,13 @@ class NextDataSets:
         self.sorted_index = None
         self.current_sorted_index = None
         self.batch_size = accuracy_batch_size
-        #print(self.next_type)
-        
+        # print(self.next_type)
+
     def __random(self):
         if self.n_current_index is None:
             self.n_current_index = 0
-        self.n_current_index = random.randint(self.n_current_index, (len(self.data_sets)-1))
+        self.n_current_index = random.randint(
+            self.n_current_index, (len(self.data_sets)-1))
 
     def __iterate(self):
         if self.n_current_index is None or self.n_current_index + 1 == len(self.data_sets):
@@ -125,10 +160,11 @@ class NextDataSets:
             self.n_current_index = self.n_current_index + 1
 
     def __sort_index_patients(self):
-        patients = [x.get_number_of_batches_of_patients(batch_size=self.batch_size) for x in self.data_sets]
+        patients = [x.get_number_of_batches_of_patients(
+            batch_size=self.batch_size) for x in self.data_sets]
         patients = np.array(patients)
         self.sorted_index = np.argsort(patients).tolist()
-        #print(self.sorted_index)
+        # print(self.sorted_index)
 
     def __biggest(self):
         if self.sorted_index is None:
@@ -158,7 +194,7 @@ class NextDataSets:
 
     def __sort_index_score(self, classifier):
         try:
-            scores = [x.get_score(classifier) for x in self.data_sets] # TODO: 
+            scores = [x.get_score(classifier) for x in self.data_sets]  # TODO:
             scores = np.array(scores)
             self.sorted_index = np.argsort(scores).tolist()
         except:

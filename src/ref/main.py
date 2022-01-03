@@ -98,3 +98,53 @@ def make_non_iterative_classifier(database: Database,
     # return classifier.make_fit(databases)
     # agg_cls =
     return classifier.add_fit(database)
+
+
+def make_weighted_iterative_classifier(
+    databases: list,
+    proportion: float = 0.5,
+    n_iteration: int = 5,
+    classifier=WarmStartAdaBoostClassifier(),
+    n_estimators: int = None,
+    n_type: str = "random",
+    n_batch_size: int = 1,
+    var_choosing_next_database: str = "worst",
+    patients_batch_size: int = 1
+):
+
+    classifier = classifier.set_beginning()
+    if n_estimators is None:
+        classifier_iterator = Classifier(classifier)
+    else:
+        n_generator = NextN(n_size=n_estimators,
+                            n_data_sets=len(databases),
+                            n_type=n_type,
+                            batch_size=n_batch_size,
+                            proportion=proportion,
+                            n_iteration=n_iteration)
+        # print("Make: N Generator: "+str(n_generator))
+        classifier_iterator = Classifier(classifier=classifier,
+                                         n_generator=n_generator)
+
+    database_chooser = NextDataSets(data_sets=databases,
+                                    next_type=var_choosing_next_database,
+                                    accuracy_batch_size=patients_batch_size)
+
+    # i = 0
+
+    while classifier_iterator.finished() is False:
+        # print(i)
+        # i = i+1
+        # erhöht die Anzahl der Entscheidungsbäume
+        classifier = classifier_iterator.get_prepared_classifier()
+        index = database_chooser.get_next_index(classifier)
+        #print("Index: "+str(index))
+        #print("Length Databases: "+str(len(databases)))
+        current_database = databases[index]  # wählt die nächste Datenbank
+        classifier = current_database.extend_classifier(
+            classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
+        classifier_iterator.update_classifier(
+            classifier)  # updatet den Klassifizierer
+        # print("Round finished.")
+    # print("classifier finished.")
+    return classifier

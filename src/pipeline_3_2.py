@@ -9,7 +9,7 @@ from ref.next_n_size import NextN
 from ref.next_n_size import NextDataSets
 from ref.classifier import WarmStartAdaBoostClassifier
 from ref.classifier import Classifier
-from ref.main import make_iterative_classifier
+from ref.main import make_iterative_classifier, make_weighted_iterative_classifier
 
 # Utils
 import time
@@ -125,7 +125,8 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test):
     # 20 estimators / 5 dbs / 2 rounds = 2 estimators at each db for each round
 
     # Settings II
-    n_type = "batch"
+    # n_type = "batch"
+    n_type = "proportional"
     var_choosing_next_database = "iterate"
 
     # Simulate n DB pairs with decreasing sample size imbalance
@@ -171,11 +172,14 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test):
     for i in range(0, len(db_pairs)):
 
         db_pair = db_pairs[i]
+        degree_of_balance = round(balance_list[i], 2)
 
         timer_start = time.time()
 
-        classifier_iterative = make_iterative_classifier(
+        classifier_iterative = make_weighted_iterative_classifier(
             databases=db_pair,
+            proportion=degree_of_balance,
+            n_iteration=n_iteration,
             n_estimators=n_estimators,
             n_type=n_type,
             n_batch_size=n_batch_size,

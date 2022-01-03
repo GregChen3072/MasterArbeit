@@ -63,7 +63,7 @@ for train_index, test_index in sss.split(X, y):
     # None
 
     # Pipeline 2 2 unweighted
-    pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
+    # pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 unweighted
     # pipeline_3_2_unweighted(X_train, X_test, y_train, y_test)
@@ -72,7 +72,7 @@ for train_index, test_index in sss.split(X, y):
     # pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 weighted
-    # pipeline_3_2_weighted(X_train, X_test, y_train, y_test)
+    pipeline_3_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pack up test set
     # Split train set into n sites | split 10 DB pairs | simulate 10 sites with class imbalance
