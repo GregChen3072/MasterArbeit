@@ -13,6 +13,9 @@ from numpy import ndarray
 from sklearn.ensemble import AdaBoostClassifier
 from ref.database import Database
 
+# Utils
+import time
+
 
 class CombinedAdaBoostClassifier(AdaBoostClassifier):
 
@@ -141,16 +144,114 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
         #           "n_estimators": self.start_classifier.n_estimators*len(list_of_databases),
         #           "estimator_errors_": estimator_errors,
         #           **dict_classes}
-        #self.estimators_ = list_of_estimators
-        #self.estimator_weights_ = list_of_estimator_weights
-        #self.feature_importances_ = feature_importances
+        # self.estimators_ = list_of_estimators
+        # self.estimator_weights_ = list_of_estimator_weights
+        # self.feature_importances_ = feature_importances
         self.n_estimators = len(self.estimators_)
-        #self.n_classes_ = dict_classes.get("n_classes_")
-        #self.classes_ = dict_classes.get("classes_")
+        # self.n_classes_ = dict_classes.get("n_classes_")
+        # self.classes_ = dict_classes.get("classes_")
 
         # self.current_classifier.set_params(**set_dict)
         # self.set_params(**set_dict)
         return self  # self.current_classifier
+
+    def make_fit_w(self, list_of_databases):
+        if len(list_of_databases) == 0:
+            raise Exception("There are no databases.")
+
+        # Make ada booster
+        list_of_ada_booster = []
+
+        total_number_of_patients = 0
+        for database in list_of_databases:
+            total_number_of_patients += database.get_number_of_patients()
+
+        training_duration_max = 0
+        duration_list = []
+
+        for database in list_of_databases:
+            # if database is not Database:
+            #    raise Exception("This is not an Database: " + str(database))
+            ratio = round(database.get_number_of_patients() /
+                          total_number_of_patients, 2)
+            i_estimators = int(self.n_estimators * ratio)
+
+            classifier = AdaBoostClassifier(
+                base_estimator=self.base_estimator,
+                n_estimators=i_estimators,
+                learning_rate=self.learning_rate,
+                algorithm=self.algorithm,
+                random_state=self.random_state
+            )
+
+            timer_start = time.time()
+
+            list_of_ada_booster.append(
+                database.extend_classifier(classifier))
+
+            timer_stop = time.time()
+
+            training_duration = timer_stop - timer_start
+            duration_list.append(round(training_duration, 5))
+
+            if training_duration >= training_duration_max:
+                training_duration_max = round(training_duration, 5)
+
+        self.list_of_ada_booster = list_of_ada_booster
+
+        # get CLASSES
+        dict_classes = self.__get_classes(list_of_ada_booster)
+        self.n_classes_ = dict_classes.get("n_classes_")
+        self.classes_ = dict_classes.get("classes_")
+
+        # get ESTIMATORS
+        list_of_estimators = self.__get_estimator_list(list_of_ada_booster)
+        self.estimators_ = list_of_estimators
+
+        # make DATABASES WEIGHTS
+        list_of_databases_weights, number_of_batches = self.__make_database_weights(list_of_databases,
+                                                                                    self.patients_batch_size)
+        self.list_of_databases_weights = list_of_databases_weights
+        self.n_evaluated_batches = number_of_batches
+
+        # make ESTIMATOR WEIGHTS
+        list_of_estimator_weights = self.__make_estimator_weights(
+            len_list_of_estimators=len(list_of_estimators),
+            list_of_databases_weights=list_of_databases_weights,
+            list_of_ada_booster=list_of_ada_booster,
+            use_weights=self.weight_databases)
+        self.estimator_weights_ = list_of_estimator_weights
+
+        # make feature_importances
+        # feature_importances = self.__make_feature_importances(
+        #        list_of_databases_weights = list_of_databases_weights,
+        #        use_weights = self.weight_databases,
+        #        list_of_ada_booster = list_of_ada_booster)
+
+        # make ESTIMEATOR ERROR
+        estimator_errors = self.__make_estimator_errors(
+            list_of_databases_weights=list_of_databases_weights,
+            list_of_ada_booster=list_of_ada_booster,
+            use_weights=self.weight_databases)
+        self.estimator_errors_ = estimator_errors
+
+        # SETTER
+        # set_dict = {"estimators_": list_of_estimators,
+        #           "estimators_weights_": list_of_estimator_weights,
+        #           "feature_importances_": feature_importances,
+        #           "n_estimators": self.start_classifier.n_estimators*len(list_of_databases),
+        #           "estimator_errors_": estimator_errors,
+        #           **dict_classes}
+        # self.estimators_ = list_of_estimators
+        # self.estimator_weights_ = list_of_estimator_weights
+        # self.feature_importances_ = feature_importances
+        self.n_estimators = len(self.estimators_)
+        # self.n_classes_ = dict_classes.get("n_classes_")
+        # self.classes_ = dict_classes.get("classes_")
+
+        # self.current_classifier.set_params(**set_dict)
+        # self.set_params(**set_dict)
+        return self, duration_list, training_duration_max  # self.current_classifier
 
     @staticmethod
     def __get_classes(list_of_ada_booster: List[AdaBoostClassifier]):

@@ -17,6 +17,9 @@ class Database:
     def get_number_of_batches_of_patients(self, batch_size=1):
         return math.ceil(len(self.y) / batch_size)
 
+    def get_number_of_patients(self):
+        return len(self.y)
+
     def extend_classifier(self, classifier):
         return classifier.fit(self.x, self.y)
 

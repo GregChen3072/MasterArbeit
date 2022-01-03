@@ -17,8 +17,8 @@ from pipeline_1_1 import pipeline_1_1
 from pipeline_2_1 import pipeline_2_1
 from pipeline_3_1 import pipeline_3_1
 
-from pipeline_2_2 import pipeline_2_2_unweighted
-from pipeline_3_2 import pipeline_3_2_unweighted
+from pipeline_2_2 import pipeline_2_2_unweighted, pipeline_2_2_weighted
+from pipeline_3_2 import pipeline_3_2_unweighted, pipeline_3_2_weighted
 
 
 import pickle
@@ -66,10 +66,10 @@ for train_index, test_index in sss.split(X, y):
     # pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 unweighted
-    pipeline_3_2_unweighted(X_train, X_test, y_train, y_test)
+    # pipeline_3_2_unweighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 2 2 weighted
-    # pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
+    pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 weighted
     # pipeline_3_2_weighted(X_train, X_test, y_train, y_test)
