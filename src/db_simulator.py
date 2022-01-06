@@ -129,7 +129,7 @@ def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step=0.
     return res
 
 
-def simulate_class_imbalance():
+def __simulate_class_imbalance():
     '''
         Interval: 10%
         P 10% vs N 90%
@@ -174,7 +174,7 @@ def simulate_class_imbalance():
     print('Resampled dataset shape %s' % Counter(y_res))
 
 
-def run_proto(n_estimators, test_size):
+def __run_proto(n_estimators, test_size):
     iris = load_iris()
     X = iris.get("data")
     y = iris.get("target")

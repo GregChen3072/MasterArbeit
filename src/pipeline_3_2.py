@@ -15,7 +15,7 @@ from ref.main import make_iterative_classifier, make_weighted_iterative_classifi
 import time
 
 
-def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test):
+def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, sss_counter):
     # Settings I
     n_estimators = 100
     n_db = 2
@@ -112,7 +112,7 @@ def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test):
     # return [score_whole, res, dic.get("balance_list"), time_list]
 
 
-def pipeline_3_2_weighted(X_train, X_test, y_train, y_test):
+def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
     # Settings I
     n_estimators = 100
     n_db = 2
@@ -141,7 +141,8 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test):
     print("Federation Iterative not Weighted")
 
     # Initialize
-    # res = list()
+    results = list()
+
     res_f_1 = list()
     res_mcc = list()
     res_auc = list()
@@ -192,15 +193,11 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test):
         # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
         f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
-        res_f_1.append(f_1)
-        res_mcc.append(mcc)
-        res_auc.append(auc)
-        res_acc.append(acc)
 
         print(
             str(round(balance_list[i], 2)) +
             "\t\t\t" +
-            str(f_1) +
+            str(round(f_1, 2)) +
             "\t" +
             str(round(mcc, 2)) +
             "\t\t" +
@@ -210,4 +207,9 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test):
             "\t\t" +
             str(timer_list[i])
         )
+
+        results.append([sss_counter, balance_list[i],
+                        str(f_1), mcc, auc, acc, timer_list[i]])
+
+    return results
     # return [score_whole, res, dic.get("balance_list"), time_list]
