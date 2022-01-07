@@ -168,7 +168,7 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
 
     n_visits = int(1)
 
-    print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
+    print("Degree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
 
     for i in range(0, len(db_pairs)):
 
@@ -198,7 +198,7 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
             str(round(balance_list[i], 2)) +
             "\t\t\t" +
             str(round(f_1, 2)) +
-            "\t" +
+            "\t\t" +
             str(round(mcc, 2)) +
             "\t\t" +
             str(round(auc, 2)) +

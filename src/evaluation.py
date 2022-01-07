@@ -79,6 +79,7 @@ for train_index, test_index in sss.split(X, y):
     # pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 weighted (implementation completed)
+    # flat_list = [item for sublist in t for item in sublist]
     res_3_2_weighted.append(pipeline_3_2_weighted(
         X_train, X_test, y_train, y_test, sss_counter))
 
@@ -91,13 +92,14 @@ for train_index, test_index in sss.split(X, y):
     # Train classical | combiner | iterator using train set
     # Test  classical | combiner | iterator using test  set
     # Get   acc | auc | mcc | f-1   scores for each validation
-
+res_3_2_weighted_flat = [
+    res for sublist in res_3_2_weighted for res in sublist]
 df_3_2_weighted = pd.DataFrame(
-    res_3_2_weighted
+    res_3_2_weighted_flat,
+    columns=['Shuffle Round', 'Degree Imbalance', 'F-1 Score', 'MCC Score',
+             'AUC Score', 'ACC Score', 'Training Time']
 )
-# columns=['Shuffle Round', 'Degree Imbalance', 'F-1 Score', 'MCC Score',
-#              'AUC Score', 'ACC Score', 'Training Time']
-
+print(df_3_2_weighted)
 df_3_2_weighted.to_csv(
     '/Users/greg/Downloads/test_output.csv', index=False, header=False)
 

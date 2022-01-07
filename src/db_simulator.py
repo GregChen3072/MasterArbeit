@@ -98,7 +98,7 @@ def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test
     return prepared_data
 
 
-def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step=0.05, k: int = 1):
+def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step: float = 0.05, k: int = 1):
     '''
         Interval: 5%
         5%  vs 95%
@@ -112,14 +112,18 @@ def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step=0.
     db_pairs = list()
     balance_list = list()
 
-    for balance_size in arange(balance_step, (0.5 + balance_step), balance_step).tolist():
+    # balance_sizes = arange(balance_step, round((0.5 + balance_step), 2), balance_step).tolist()
+    balance_sizes = [0.05, 0.10, 0.15, 0.20,
+                     0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
+
+    for balance_degree in balance_sizes:
         for x in range(0, k):
             x_train_split_1, x_train_split_2, y_train_split_1, y_train_split_2 = train_test_split(
-                x_train, y_train, test_size=round(balance_size, 2))
+                x_train, y_train, test_size=round(balance_degree, 2))
             db_1 = make_database(x_train_split_1, y_train_split_1)
             db_2 = make_database(x_train_split_2, y_train_split_2)
             db_pairs.append([db_1, db_2])
-            balance_list.append(balance_size)
+            balance_list.append(balance_degree)
 
     res = {
         "db_pairs": db_pairs,
