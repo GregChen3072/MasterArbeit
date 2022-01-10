@@ -1,10 +1,10 @@
-# Load population
+# Load data
 from sklearn.datasets import load_breast_cancer
+from db_simulator import load_credit_card_fraud_data, load_HCC_data, load_ILPD_data
 
 # For computing multiple metrics
 from sklearn.metrics import make_scorer
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, roc_auc_score, matthews_corrcoef, f1_score
-
 from sklearn.model_selection import StratifiedShuffleSplit, cross_val_score, cross_validate
 
 from sklearn.ensemble import AdaBoostClassifier
@@ -29,15 +29,16 @@ def make_database(x, y):
 
 
 # Settings Evaluation
-X, y = load_breast_cancer(return_X_y=True)
-n_splits = 5
+# X, y = load_breast_cancer(return_X_y=True)
+X, y = load_credit_card_fraud_data()
+n_splits = 1
 
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.2, random_state=6)
 sss.get_n_splits(X, y)
 
 # Settings Classifier
-n_estimators = 100
+# n_estimators = 100
 
 # Container of results of 1000 repetitions
 
@@ -55,6 +56,7 @@ sss_counter = 0
 for train_index, test_index in sss.split(X, y):
 
     sss_counter = sss_counter + 1
+    print(f'Ongoing Shuffle Split: {sss_counter}')
 
     X_train, X_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
@@ -101,7 +103,7 @@ df_3_2_weighted = pd.DataFrame(
 )
 print(df_3_2_weighted)
 df_3_2_weighted.to_csv(
-    '/Users/greg/Downloads/test_output.csv', index=False, header=False)
+    '/Users/greg/Downloads/test_visual.csv', index=False, header=False)
 
 '''
 with open("/Users/greg/Downloads/test_output.csv", "w", newline="") as csvfile:

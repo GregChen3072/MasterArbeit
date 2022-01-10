@@ -17,7 +17,7 @@ import time
 
 def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, sss_counter):
     # Settings I
-    n_estimators = 100
+    n_estimators = 500
     n_db = 2
     n_iteration = 5
 

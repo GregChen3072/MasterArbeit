@@ -26,6 +26,39 @@ def load_iris_data():
     return X, y
 
 
+def load_credit_card_fraud_data():
+    path = "/Users/greg/Downloads/AR_Master_Thesis/data/creditcard.csv"
+    data = pd.read_csv(path)
+
+    # Remove the 1st column because it refers to time
+    X = data.iloc[:, 1:-1].to_numpy()
+    y = data.iloc[:, -1].to_numpy()
+
+    return X, y
+
+
+def load_HCC_data():
+    path = "/Users/greg/Downloads/AR_Master_Thesis/data/HCC_preprocessed.csv"
+    data = pd.read_csv(path)
+
+    # Remove the 1st column because it is an index
+    X = data.iloc[:, 1:-1].to_numpy()
+    y = data.iloc[:, -1].to_numpy()
+
+    return X, y
+
+
+def load_ILPD_data():
+    path = "/Users/greg/Downloads/AR_Master_Thesis/data/ILPD_preprocessed.csv"
+    data = pd.read_csv(path)
+
+    # Remove the 1st column because it is an index
+    X = data.iloc[:, 1:-1].to_numpy()
+    y = data.iloc[:, -1].to_numpy()
+
+    return X, y
+
+
 def make_database(x, y):
     return Database(x, y)
 
