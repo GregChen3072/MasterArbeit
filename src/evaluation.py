@@ -30,7 +30,7 @@ def make_database(x, y):
 
 # Settings Evaluation
 # X, y = load_breast_cancer(return_X_y=True)
-X, y = load_credit_card_fraud_data()
+X, y = load_HCC_data()
 n_splits = 1
 
 
@@ -71,6 +71,14 @@ for train_index, test_index in sss.split(X, y):
     # Pipeline 3 1 (implementation completed)
     # pipeline_3_1(X_train, X_test, y_train, y_test)
 
+    # Pipeline 3 1
+    # Communication Efficiency Test
+    # pipeline_3_1(X_train, X_test, y_train, y_test)
+
+    # Pipeline 3 1 (implementation completed)
+    # Communication Efficiency Test
+    # pipeline_3_1(X_train, X_test, y_train, y_test)
+
     # Pipeline 2 2 unweighted (implementation completed)
     # pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
 
@@ -90,7 +98,7 @@ for train_index, test_index in sss.split(X, y):
     )
     res_3_2_weighted.append(temp_3_2_weighted)
 
-
+'''
 res_3_2_weighted_flat = [
     res for sublist in res_3_2_weighted for res in sublist]
 
@@ -104,3 +112,4 @@ print(df_3_2_weighted)
 
 df_3_2_weighted.to_csv(
     '/Users/greg/Downloads/test_visual.csv', index=False, header=False)
+'''

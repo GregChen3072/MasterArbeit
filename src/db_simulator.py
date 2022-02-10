@@ -42,8 +42,8 @@ def load_HCC_data():
     data = pd.read_csv(path)
 
     # Remove the 1st column because it is an index
-    X = data.iloc[:, 1:-1].to_numpy()
-    y = data.iloc[:, -1].to_numpy()
+    X = data.iloc[:, 2:-1].to_numpy()
+    y = data.iloc[:, 1].to_numpy()
 
     return X, y
 

@@ -20,6 +20,7 @@ from db_simulator import load_HCC_data, load_ILPD_data
 from scoring import make_scores
 
 import pickle
+
 X, y = load_ILPD_data()
 parameters = {'n_estimators': [1, 10]}
 
@@ -30,3 +31,9 @@ clf.fit(X, y)
 
 
 sorted(clf.cv_results_.keys())
+
+# Pickling Class Instances
+# In most cases, no additional code is needed to make instances picklable.
+# By default, pickle will retrieve the class and the attributes of an instance via introspection.
+# When a class instance is unpickled, its __init__() method is usually not invoked.
+# The default behaviour first creates an uninitialized instance and then restores the saved attributes.
