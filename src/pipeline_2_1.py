@@ -25,7 +25,7 @@ def pipeline_2_1(X_train, X_test, y_train, y_test):
 
     # Settings
     list_of_n = [1, 2, 5, 10, 20, 50, 100]
-    n_estimators = 1000
+    n_estimators = 500
 
     # Simulate n DBs for n = [1, 2, 5, 10, 20, 50, 100]
     list_of_n_dbs = simulate_n_databases_with_equal_sample_size(

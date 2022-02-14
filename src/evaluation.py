@@ -31,8 +31,7 @@ def make_database(x, y):
 # Settings Evaluation
 # X, y = load_breast_cancer(return_X_y=True)
 X, y = load_HCC_data()
-n_splits = 1
-
+n_splits = 3
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.2, random_state=6)
 sss.get_n_splits(X, y)
@@ -42,13 +41,10 @@ sss.get_n_splits(X, y)
 
 # Container of results of 1000 repetitions
 
-res_1_1 = list()
-res_2_1 = list()
-res_3_1 = list()
-res_2_2_unweighted = list()
-res_3_2_unweighted = list()
-res_2_2_weighted = list()
-res_3_2_weighted = list()
+results_2_2_unweighted = list()
+results_3_2_unweighted = list()
+results_2_2_weighted = list()
+results_3_2_weighted = list()
 
 sss_counter = 0
 
@@ -61,6 +57,8 @@ for train_index, test_index in sss.split(X, y):
     X_train, X_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
 
+    ''' Part I '''
+
     # Pipeline 1 1 (implementation completed)
     # When all data centralized in one database.
     # pipeline_1_1(X_train, X_test, y_train, y_test)
@@ -71,13 +69,7 @@ for train_index, test_index in sss.split(X, y):
     # Pipeline 3 1 (implementation completed)
     # pipeline_3_1(X_train, X_test, y_train, y_test)
 
-    # Pipeline 3 1
-    # Communication Efficiency Test
-    # pipeline_3_1(X_train, X_test, y_train, y_test)
-
-    # Pipeline 3 1 (implementation completed)
-    # Communication Efficiency Test
-    # pipeline_3_1(X_train, X_test, y_train, y_test)
+    ''' Part II '''
 
     # Pipeline 2 2 unweighted (implementation completed)
     # pipeline_2_2_unweighted(X_train, X_test, y_train, y_test)
@@ -89,18 +81,21 @@ for train_index, test_index in sss.split(X, y):
     # pipeline_2_2_weighted(X_train, X_test, y_train, y_test)
 
     # Pipeline 3 2 weighted (implementation completed)
-    temp_3_2_weighted = pipeline_3_2_weighted(
+    res_3_2_weighted = pipeline_3_2_weighted(
         X_train,
         X_test,
         y_train,
         y_test,
         sss_counter
     )
-    res_3_2_weighted.append(temp_3_2_weighted)
+    results_3_2_weighted.append(res_3_2_weighted)
+
+
+print('Processing results...')
 
 '''
 res_3_2_weighted_flat = [
-    res for sublist in res_3_2_weighted for res in sublist]
+    res for sublist in results_3_2_weighted for res in sublist]
 
 df_3_2_weighted = pd.DataFrame(
     res_3_2_weighted_flat,
@@ -112,4 +107,9 @@ print(df_3_2_weighted)
 
 df_3_2_weighted.to_csv(
     '/Users/greg/Downloads/test_visual.csv', index=False, header=False)
+
+print('Results saved for pipeline 3 2. ')
 '''
+
+
+print('Experiments completed! ')
