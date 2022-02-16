@@ -14,6 +14,9 @@ from ref.combiner import CombinedAdaBoostClassifier
 from ref.classifier import WarmStartAdaBoostClassifier
 from ref.database import Database
 
+# Model Evaluation
+from scoring import make_scores
+
 
 def make_iterative_classifier(databases: list,
                               classifier=WarmStartAdaBoostClassifier(),
@@ -21,7 +24,13 @@ def make_iterative_classifier(databases: list,
                               n_type: str = "random",
                               n_batch_size: int = 1,
                               var_choosing_next_database: str = "worst",
-                              patients_batch_size: int = 1):
+                              patients_batch_size: int = 1,
+                              test_x: list() = [],
+                              test_y: list() = [],
+                              n: int = 1,
+                              r: int = 1,
+                              e: int = 1
+                              ):
     #print("n_type: "+str(n_type))
     #print("var_choosing_next_database: "+str(var_choosing_next_database))
     classifier = classifier.set_beginning()
@@ -41,9 +50,16 @@ def make_iterative_classifier(databases: list,
 
     # i = 0
 
+    res_f_1 = list()
+    res_mcc = list()
+    res_auc = list()
+    res_acc = list()  # Score Containers
+
+    i = 0
     while classifier_iterator.finished() is False:
+        # This while loop: One iteration indicates one visit to the next DB in turn.
         # print(i)
-        # i = i+1
+        i = i+1
         # erhöht die Anzahl der Entscheidungsbäume
         classifier = classifier_iterator.get_prepared_classifier()
         index = database_chooser.get_next_index(classifier)
@@ -54,6 +70,25 @@ def make_iterative_classifier(databases: list,
             classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
         classifier_iterator.update_classifier(
             classifier)  # updatet den Klassifizierer
+        f_1, mcc, auc, acc = make_scores(
+            classifier_iterator.classifier, test_x, test_y)
+        print(
+            "v" + str(i) +
+            "\t" +
+            str(n) +
+            "\t" +
+            str(r) +
+            "\t" +
+            str(e) +
+            "\t" +
+            str(round(f_1, 5)) +
+            "\t\t" +
+            str(round(mcc, 5)) +
+            "\t\t" +
+            str(round(auc, 5)) +
+            "\t\t" +
+            str(round(acc, 5))
+        )
         # print("Round finished.")
     # print("classifier finished.")
     return classifier
@@ -67,7 +102,7 @@ def make_not_iterative_classifier(databases: list,
                                   random_state=None,
                                   patients_batch_size: int = 1,
                                   weight_databases: bool = False):
-
+    ''' This function is obsolete. Not for Federated AdaBoost experiments.  '''
     classifier = CombinedAdaBoostClassifier(base_estimator=base_estimator,
                                             learning_rate=learning_rate,
                                             n_estimators=n_estimators,

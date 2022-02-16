@@ -31,7 +31,7 @@ def make_database(x, y):
 # Settings Evaluation
 # X, y = load_breast_cancer(return_X_y=True)
 X, y = load_HCC_data()
-n_splits = 100
+n_splits = 1
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.2, random_state=6)
 sss.get_n_splits(X, y)
@@ -56,7 +56,7 @@ for train_index, test_index in sss.split(X, y):
     y_train, y_test = y[train_index], y[test_index]
 
     ''' Part III '''
-    for r in range(1, 11):
+    for r in range(1, 4):
 
         for e in [1, 2, 5, 10]:
             # Pipeline 3 1
@@ -77,7 +77,7 @@ res_comm_effi_flat = [
 
 df_res_comm_effi = pd.DataFrame(
     res_comm_effi_flat,
-    columns=['s', 'n', 'r', 'e', 'F-1 Score', 'MCC Score',
+    columns=['s', 'r', 'v', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
 
