@@ -1,3 +1,4 @@
+from scipy import rand
 from sklearn.datasets import load_iris
 from sklearn.datasets import load_breast_cancer
 
@@ -71,7 +72,7 @@ def simulate_1_database_with_all_data_centralized():
     return X, y
 
 
-def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test, list_of_n=[1]):
+def simulate_n_databases_with_equal_sample_size(X_train, y_train, list_of_n=[1]):
     # List of db_list
     # Define an empty list which will be filled with dataframes as list elements.
     # Each list element represents a database at a certain site / hospital.
@@ -112,7 +113,7 @@ def simulate_n_databases_with_equal_sample_size(X_train, X_test, y_train, y_test
         # n = {1, 2, 3, ..., n}
         for n in range(0, n):
             db_n_df = df_train_set.sample(
-                n=n_samples_per_db, replace=False, random_state=1)
+                n=n_samples_per_db, replace=False, random_state=6)
 
             X_train_of_db_i = db_n_df.drop(columns=['target']).to_numpy()
             y_train_of_db_i = db_n_df['target'].to_numpy()
@@ -152,7 +153,7 @@ def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step: f
     for balance_degree in balance_sizes:
         for x in range(0, k):
             x_train_split_1, x_train_split_2, y_train_split_1, y_train_split_2 = train_test_split(
-                x_train, y_train, test_size=round(balance_degree, 2))
+                x_train, y_train, test_size=round(balance_degree, 2), random_state=6)
             db_1 = make_database(x_train_split_1, y_train_split_1)
             db_2 = make_database(x_train_split_2, y_train_split_2)
             db_pairs.append([db_1, db_2])

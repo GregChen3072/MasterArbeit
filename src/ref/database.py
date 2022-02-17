@@ -25,3 +25,6 @@ class Database:
 
     def get_score(self, classifier):
         classifier.score(self.x, self.y)
+
+    def get_sub_samples():
+        pass
