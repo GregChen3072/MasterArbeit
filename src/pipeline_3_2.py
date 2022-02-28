@@ -15,9 +15,9 @@ from ref.main import make_iterative_classifier, make_weighted_iterative_classifi
 import time
 
 
-def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, sss_counter):
+def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
-    n_estimators = 500
+    n_estimators = E
     n_db = 2
     n_iteration = 5
 
@@ -41,39 +41,33 @@ def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, sss_counter):
     print("Federation Iterative not Weighted")
 
     # Initialize
-    # res = list()
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
-
-    timer_list = list()  # Timers
+    results = list()
+    # timer_list = list()  # Timers
 
     db_pairs = prepared_data.get("db_pairs")  # DB Pairs
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
 
-    print()
-    print("Settings")
-    print(f'Number of estimators: {n_estimators}')
-    print(f'Number of DBs: {n_db}')
-    print(f'Number of rounds: {n_iteration}')
-    print(
-        f'Number of estimators per DB per iteration: {n_batch_size}'
-    )
-    print()
-
-    print("Progress: ")
+    # print()
+    # print("Settings")
+    # print(f'Number of estimators: {n_estimators}')
+    # print(f'Number of DBs: {n_db}')
+    # print(f'Number of rounds: {n_iteration}')
+    # print(
+    #     f'Number of estimators per DB per iteration: {n_batch_size}'
+    # )
+    # print()
+    # print("Progress: ")
 
     n_visits = int(1)
 
-    print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
+    print("s\tDegree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(db_pairs)):
 
         db_pair = db_pairs[i]
 
-        timer_start = time.time()
+        # timer_start = time.time()
 
         classifier_iterative = make_iterative_classifier(
             databases=db_pair,
@@ -84,35 +78,34 @@ def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, sss_counter):
         )
 
         # Stop timer
-        timer_stop = time.time()
-        timer_list.append(timer_stop - timer_start)
+        # timer_stop = time.time()
+        # timer_list.append(timer_stop - timer_start)
         # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
         f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
-        res_f_1.append(f_1)
-        res_mcc.append(mcc)
-        res_auc.append(auc)
-        res_acc.append(acc)
 
         print(
-            str(round(balance_list[i], 2)) +
+            str(s) + "\t" +
+            str(round(balance_list[i], 3)) +
             "\t\t\t" +
-            str(f_1) +
-            "\t" +
-            str(round(mcc, 2)) +
+            str(round(f_1, 3)) +
             "\t\t" +
-            str(round(auc, 2)) +
+            str(round(mcc, 3)) +
             "\t\t" +
-            str(round(acc, 2)) +
+            str(round(auc, 3)) +
             "\t\t" +
-            str(timer_list[i])
+            str(round(acc, 3))
         )
-    # return [score_whole, res, dic.get("balance_list"), time_list]
+
+        results.append([s, balance_list[i],
+                        f_1, mcc, auc, acc])
+
+    return results
 
 
-def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
+def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
-    n_estimators = 100
+    n_estimators = E
     n_db = 2
     n_iteration = 5
 
@@ -139,18 +132,13 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
     # Initialize
     results = list()
 
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
-
-    timer_list = list()  # Timers
+    # timer_list = list()  # Timers
 
     db_pairs = prepared_data.get("db_pairs")  # DB Pairs
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
 
-    print()
+    """ print()
     print("Settings")
     print(f'Number of estimators: {n_estimators}')
     print(f'Number of DBs: {n_db}')
@@ -160,18 +148,18 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
     )
     print()
 
-    print("Progress: ")
+    print("Progress: ") """
 
     n_visits = int(1)
 
-    print("Degree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
+    print("s\tDegree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(db_pairs)):
 
         db_pair = db_pairs[i]
         degree_of_balance = round(balance_list[i], 2)
 
-        timer_start = time.time()
+        # timer_start = time.time()
 
         classifier_iterative = make_weighted_iterative_classifier(
             databases=db_pair,
@@ -184,28 +172,26 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
         )
 
         # Stop timer
-        timer_stop = time.time()
-        timer_list.append(timer_stop - timer_start)
+        # timer_stop = time.time()
+        # timer_list.append(timer_stop - timer_start)
         # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
         f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
 
         print(
+            str(s) + "\t" +
             str(round(balance_list[i], 2)) +
             "\t\t\t" +
-            str(round(f_1, 2)) +
+            str(round(f_1, 3)) +
             "\t\t" +
-            str(round(mcc, 2)) +
+            str(round(mcc, 3)) +
             "\t\t" +
-            str(round(auc, 2)) +
+            str(round(auc, 3)) +
             "\t\t" +
-            str(round(acc, 2)) +
-            "\t\t" +
-            str(timer_list[i])
+            str(round(acc, 3))
         )
 
-        results.append([sss_counter, balance_list[i],
-                        str(f_1), mcc, auc, acc, timer_list[i]])
+        results.append([s, balance_list[i],
+                        f_1, mcc, auc, acc])
 
     return results
-    # return [score_whole, res, dic.get("balance_list"), time_list]

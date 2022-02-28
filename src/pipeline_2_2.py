@@ -15,9 +15,9 @@ from ref.combiner import CombinedAdaBoostClassifier
 import time
 
 
-def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
+def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test, s, E):
 
-    n_estimators = 100
+    n_estimators = E
 
     # Simulate n DB pairs with decreasing sample size imbalance
     prepared_data = simulate_db_size_imbalance(
@@ -29,20 +29,15 @@ def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
     print("Federation Non-iterative not Weighted")
 
     # Initialize
-    # res = list()
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
-
-    timer_list = list()  # Timers
+    results = list()
+    # timer_list = list()  # Timers
 
     db_pairs = prepared_data.get("db_pairs")  # DB Pairs
 
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
 
-    print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tMax\t\tDuration in Seconds")
+    print("s\tDegree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(db_pairs)):
         db_pair = db_pairs[i]
@@ -59,40 +54,34 @@ def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test):
             weight_databases=False
         )
 
-        classifier_combined, duration_list, training_duration_max = classifier.make_fit(
+        classifier_combined = classifier.make_fit(
             db_pair)
 
         # timer_stop = time.time()
         # timer_list.append(timer_stop - timer_start)
         # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
         f_1, mcc, auc, acc = make_scores(classifier_combined, X_test, y_test)
-        res_f_1.append(f_1)
-        res_mcc.append(mcc)
-        res_auc.append(auc)
-        res_acc.append(acc)
 
         print(
+            str(s) + "\t" +
             str(round(balance_list[i], 2)) +
             "\t\t\t" +
-            str(f_1) +
-            "\t" +
-            str(round(mcc, 2)) +
+            str(round(f_1, 3)) +
             "\t\t" +
-            str(round(auc, 2)) +
+            str(round(mcc, 3)) +
             "\t\t" +
-            str(round(acc, 2)) +
+            str(round(auc, 3)) +
             "\t\t" +
-            str(training_duration_max) +
-            "\t\t" +
-            str(duration_list)
+            str(round(acc, 3))
         )
+        results.append([s, balance_list[i],
+                        f_1, mcc, auc, acc])
+    return results
 
-    # return [score_whole, res, dic.get("balance_list"), time_list]
 
+def pipeline_2_2_weighted(X_train, X_test, y_train, y_test, s, E):
 
-def pipeline_2_2_weighted(X_train, X_test, y_train, y_test):
-
-    n_estimators = 100
+    n_estimators = E
 
     # Simulate n DB pairs with decreasing sample size imbalance
     prepared_data = simulate_db_size_imbalance(
@@ -104,20 +93,16 @@ def pipeline_2_2_weighted(X_train, X_test, y_train, y_test):
     print("Federation Non-iterative not Weighted")
 
     # Initialize
-    # res = list()
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
+    results = list()
 
-    timer_list = list()  # Timers
+    # timer_list = list()  # Timers
 
     db_pairs = prepared_data.get("db_pairs")  # DB Pairs
 
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
 
-    print("Degree Imbalance\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tMax\t\tDuration in Seconds")
+    print("s\tDegree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(db_pairs)):
         db_pair = db_pairs[i]
@@ -135,32 +120,27 @@ def pipeline_2_2_weighted(X_train, X_test, y_train, y_test):
             weight_databases=False
         )
 
-        classifier_combined, duration_list, training_duration_max = classifier.make_fit_w(
+        classifier_combined = classifier.make_fit_w(
             db_pair)
 
         # timer_stop = time.time()
         # timer_list.append(timer_stop - timer_start)
         # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
         f_1, mcc, auc, acc = make_scores(classifier_combined, X_test, y_test)
-        res_f_1.append(f_1)
-        res_mcc.append(mcc)
-        res_auc.append(auc)
-        res_acc.append(acc)
 
         print(
+            str(s) + "\t" +
             str(round(balance_list[i], 2)) +
             "\t\t\t" +
-            str(f_1) +
-            "\t" +
-            str(round(mcc, 2)) +
+            str(round(f_1, 3)) +
             "\t\t" +
-            str(round(auc, 2)) +
+            str(round(mcc, 3)) +
             "\t\t" +
-            str(round(acc, 2)) +
+            str(round(auc, 3)) +
             "\t\t" +
-            str(training_duration_max) +
-            "\t\t" +
-            str(duration_list)
+            str(round(acc, 3))
         )
+        results.append([s, balance_list[i],
+                        f_1, mcc, auc, acc])
 
-    # return [score_whole, res, dic.get("balance_list"), time_list]
+    return results

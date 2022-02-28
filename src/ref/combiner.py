@@ -256,7 +256,7 @@ class CombinedAdaBoostClassifier(AdaBoostClassifier):
 
         # self.current_classifier.set_params(**set_dict)
         # self.set_params(**set_dict)
-        return self, duration_list, training_duration_max  # self.current_classifier
+        return self  # , duration_list, training_duration_max  # self.current_classifier
 
     @staticmethod
     def __get_classes(list_of_ada_booster: List[AdaBoostClassifier]):
