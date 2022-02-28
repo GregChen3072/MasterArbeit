@@ -1,3 +1,4 @@
+from sklearn.datasets import make_classification
 import time
 import pandas as pd
 import numpy as np
@@ -29,17 +30,23 @@ path_ILPD = "/Users/greg/Downloads/AR_Master_Thesis/data/ILPD_preprocessed.csv"
 data_credit_card = pd.read_csv(path_data_credit_card)
 
 # iris = pd.read_csv('/kaggle/input/iris/Iris.csv')
-X = None
-y = None
+
+
+X, y = make_classification(n_samples=53, n_features=5,
+                           n_informative=2, n_redundant=0,
+                           random_state=0, shuffle=False)
+
 
 # Split dataset into training set and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
 # Create adaboost classifer object
-abc = AdaBoostClassifier(n_estimators=100, learning_rate=1, random_state=0)
+abc = AdaBoostClassifier(n_estimators=5, learning_rate=1, random_state=0)
 
 # Train Adaboost Classifer
 model1 = abc.fit(X_train, y_train)
+
+print(len(model1.estimators_))
 
 # Predict the response for test dataset
 y_pred = model1.predict(X_test)
@@ -52,7 +59,7 @@ print("AdaBoost Classifier Model Accuracy:", accuracy_score(y_test, y_pred))
 
 # import Support Vector Classifier
 
-
+""" 
 # import scikit-learn metrics module for accuracy calculation
 svc = SVC(probability=True, kernel='linear')
 
@@ -72,3 +79,4 @@ y_pred = model2.predict(X_test)
 
 # calculate and print model accuracy
 print("Model Accuracy with SVC Base Estimator:", accuracy_score(y_test, y_pred))
+ """

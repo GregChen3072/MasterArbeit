@@ -72,7 +72,7 @@ def simulate_1_database_with_all_data_centralized():
     return X, y
 
 
-def simulate_n_databases_with_equal_sample_size(X_train, y_train, list_of_n=[1]):
+def simulate_n_databases_with_equal_sample_size(X_train, y_train, list_of_n):
     # List of db_list
     # Define an empty list which will be filled with dataframes as list elements.
     # Each list element represents a database at a certain site / hospital.
@@ -132,7 +132,7 @@ def simulate_n_databases_with_equal_sample_size(X_train, y_train, list_of_n=[1])
     return prepared_data
 
 
-def simulate_db_size_imbalance(x_train, x_test, y_train, y_test, balance_step: float = 0.05, k: int = 1):
+def simulate_db_size_imbalance(x_train, y_train, balance_step: float = 0.05, k: int = 1):
     '''
         Interval: 5%
         5%  vs 95%

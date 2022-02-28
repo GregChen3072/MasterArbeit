@@ -21,47 +21,37 @@ from ref.combiner import CombinedAdaBoostClassifier
 import time
 
 
-def pipeline_2_1(X_train, X_test, y_train, y_test):
+def pipeline_2_1(X_train, X_test, y_train, y_test, s, N, E):
 
     # Settings
-    list_of_n = [1, 2, 5, 10, 20, 50, 100]
-    n_estimators = 500
+    # ns = ns
+    # E = E
 
-    # Simulate n DBs for n = [1, 2, 5, 10, 20, 50, 100]
+    # Simulate n DBs for n = {1, 2, 5, 10, 20, 50, 100}
     list_of_n_dbs = simulate_n_databases_with_equal_sample_size(
-        X_train, X_test, y_train, y_test,
-        list_of_n=list_of_n,
-    )
+        X_train, y_train, list_of_n=N)
 
     # Initialize
-    res = list()
-    timer_list = list()
+    results = list()
 
     # Count of data points for global train and test sets
     # len_data = len(data.get("data"))
     # len_test = len_data*test_size
 
-    # Initialize
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
-
     # Granularity of sites
     # list_of_n = list_of_n
 
-    # Print title
-    print("N Sites Combined")
-    print()
-
-    print("n Databases\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
+    print("s\tn\te\tF-1\t\tMCC Score\tAUC Score\tACC Score")
 
     for i_n_dbs in range(0, len(list_of_n_dbs)):
         # i_n_dbs = i_n_dbs  # n sites / DBs for a given n
-
+        n = N[i_n_dbs]
+        # print(len(list_of_n_dbs[i_n_dbs]))
+        e = int(E/n)
+        # print("e = " + str(e))
         # Instantiate classifier
         classifier_fed_aggregated = CombinedAdaBoostClassifier(
-            n_estimators=int(n_estimators/list_of_n[i_n_dbs]),
+            n_estimators=e,
             learning_rate=1.,
             algorithm='SAMME.R',
             random_state=6,
@@ -69,45 +59,36 @@ def pipeline_2_1(X_train, X_test, y_train, y_test):
             # For n sites evaluation, all sites have equal weights, no need to weigh by the sizes of db
             weight_databases=False
         )
-
+        # print(classifier_fed_aggregated.n_estimators)
         # Collect all estimators / sending estimators to the central
-        timer_max = 0
+        # timer_max = 0
 
-        for db in list_of_n_dbs[i_n_dbs]:
-            # Start timer
-            timer_start = time.time()
+        # For each db in this experiment (in which the number of sites = {1, 2, 5, 10, 20, 50, 100})
+        # for db in list_of_n_dbs[i_n_dbs]:
+        #     classifier_fed_aggregated.add_fit(db)
 
-            # Feeding one db object
-            classifier_fed_aggregated.add_fit(db)
-
-            # Stop timer
-            timer_stop = time.time()
-
-            timer_actual = timer_stop - timer_start
-
-            # The communication efficiency of a combined model depends on the slowest site.
-            if timer_max <= timer_actual:
-                timer_max = timer_actual
-
-        timer_list.append(timer_max)
+        classifier_fed_aggregated.make_fit(list_of_n_dbs[i_n_dbs])
 
         f_1, mcc, auc, acc = make_scores(
             classifier_fed_aggregated, X_test, y_test)
-        res_f_1.append(f_1)
-        res_mcc.append(mcc)
-        res_auc.append(auc)
-        res_acc.append(acc)
+
+        results.append([s, n, e,
+                        f_1, mcc, auc, acc])
 
         print(
-            str(list_of_n[i_n_dbs]) +
-            "\t\t" +
-            str(f_1) +
+            str(s) +
             "\t" +
-            str(round(mcc, 2)) +
+            str(n) +
+            "\t" +
+            str(e) +
+            "\t" +
+            str(round(f_1, 3)) +
             "\t\t" +
-            str(round(auc, 2)) +
+            str(round(mcc, 3)) +
             "\t\t" +
-            str(round(acc, 2)) +
+            str(round(auc, 3)) +
             "\t\t" +
-            str(timer_list[i_n_dbs])
+            str(round(acc, 3))
         )
+
+    return results

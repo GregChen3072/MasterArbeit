@@ -33,9 +33,7 @@ def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, sss_counter):
 
     # Simulate n DB pairs with decreasing sample size imbalance
     prepared_data = simulate_db_size_imbalance(
-        X_train, X_test, y_train, y_test,
-        balance_step=0.05,
-        k=1
+        X_train, y_train, balance_step=0.05, k=1
     )
 
     # Print title
@@ -131,9 +129,7 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, sss_counter):
 
     # Simulate n DB pairs with decreasing sample size imbalance
     prepared_data = simulate_db_size_imbalance(
-        X_train, X_test, y_train, y_test,
-        balance_step=0.05,
-        k=1
+        X_train, y_train, balance_step=0.05, k=1
     )
 
     # Print title

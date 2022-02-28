@@ -13,17 +13,12 @@ from ref.classifier import Classifier
 
 from ref.main import make_iterative_classifier
 
-# Utils
-import time
 
-
-def pipeline_3_1(X_train, X_test, y_train, y_test):
+def pipeline_3_1(X_train, X_test, y_train, y_test, s, N, E, r=1):
 
     # Settings
-    degrees_of_data_dispersion = [1, 2, 5, 10, 20, 50, 100]
-    n_estimators = 500
-    # n_db = 10
-    n_iteration = 5
+    # E = E
+    n_iteration = r  # Default: 1
 
     n_type = "batch"
     var_choosing_next_database = "iterate"
@@ -31,77 +26,58 @@ def pipeline_3_1(X_train, X_test, y_train, y_test):
 
     # Simulate n DBs for n = [1, 2, 5, 10, 20, 50, 100]
     n_instances_of_dispersion = simulate_n_databases_with_equal_sample_size(
-        X_train, X_test, y_train, y_test,
-        degrees_of_data_dispersion=degrees_of_data_dispersion,
+        X_train, y_train, list_of_n=N
     )
 
     # Initialize
-    res = list()
-    timer_list = list()  # Timers
-
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
+    results = list()
 
     # Granularity of sites
     # degrees_of_data_dispersion = degrees_of_data_dispersion
 
-    # Print title
-    print("N Sites Iterative")
-    print()
-
-    print("n Databases\tF-1 Score\t\tMCC Score\tAUC Score\tACC Score\tDuration in Seconds")
+    print("s\tr\tn\te\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(n_instances_of_dispersion)):
 
-        n_db = degrees_of_data_dispersion[i]
-        n_batch_size = int(n_estimators / (n_db * n_iteration))
-        ''' n_estimators = n_batch_size * n_db * n_iteration '''
+        n = N[i]
+        e = int(E / (n * n_iteration))
+        ''' n_estimators = n_batch_size * n * n_iteration '''
         # 20 estimators / 5 dbs / 1 iterations = collect 4 estimators at each db for each round
         # 20 estimators / 5 dbs / 2 iterations = collect 2 estimators at each db for each round
 
         n_dbs = n_instances_of_dispersion[i]
 
-        timer_start = time.time()
-
         classifier_iterative = make_iterative_classifier(
             databases=n_dbs,  # list
             # Default: classifier=WarmStartAdaBoostClassifier()
-            n_estimators=n_estimators,
+            n_estimators=E,
             n_type=n_type,
-            n_batch_size=n_batch_size,
+            n_batch_size=e,
             var_choosing_next_database=var_choosing_next_database
             # Default: patients_batch_size: int = 1
         )
 
-        # Stop timer
-        timer_stop = time.time()
-        timer_list.append(timer_stop - timer_start)
-        # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
-
         f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
-        res_f_1.append(f_1)
-        res_mcc.append(mcc)
-        res_auc.append(auc)
-        res_acc.append(acc)
-
         print(
-            str(degrees_of_data_dispersion[i]) +
-            "\t\t" +
-            str(f_1) +
+            str(s) +
             "\t" +
-            str(round(mcc, 2)) +
+            str(r) +
+            "\t" +
+            str(n) +
+            "\t" +
+            str(e) +
+            "\t" +
+            str(round(f_1, 3)) +
             "\t\t" +
-            str(round(auc, 2)) +
+            str(round(mcc, 3)) +
             "\t\t" +
-            str(round(acc, 2)) +
+            str(round(auc, 3)) +
             "\t\t" +
-            str(timer_list[i])
+            str(round(acc, 3))
         )
+        results.append([s, r, n, e, f_1, mcc, auc, acc])
 
-    print()
-    print()
+    return results
 
 
 def pipeline_3_1_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
@@ -123,8 +99,6 @@ def pipeline_3_1_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
 
     # Initialize
     results = list()
-
-    print("s\tr\tv\tn\te\tF_1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(n_instances_of_dispersion)):
 

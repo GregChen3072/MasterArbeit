@@ -21,6 +21,10 @@ class Database:
         return len(self.y)
 
     def extend_classifier(self, classifier):
+        # When the number of samples per site is too small (< 53), only one estimator will be trained.
+        # Something like a default setting in AdaBoostClassifier.
+        # This problem will not occur if the base sample is big enough meaning each site should have at least 53 data points.
+
         return classifier.fit(self.x, self.y)
 
     def get_score(self, classifier):

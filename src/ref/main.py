@@ -70,7 +70,7 @@ def make_iterative_classifier(databases: list,
             classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
         classifier_iterator.update_classifier(
             classifier)  # updatet den Klassifizierer
-        f_1, mcc, auc, acc = make_scores(
+        """ f_1, mcc, auc, acc = make_scores(
             classifier_iterator.classifier, test_x, test_y)
         print(
             "v" + str(i) +
@@ -88,7 +88,7 @@ def make_iterative_classifier(databases: list,
             str(round(auc, 5)) +
             "\t\t" +
             str(round(acc, 5))
-        )
+        ) """
         # print("Round finished.")
     # print("classifier finished.")
     return classifier

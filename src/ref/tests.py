@@ -40,14 +40,14 @@ from test_help_functions import test_k_federated_algorithm_for_each_balance_step
 #               best: Wie worst, nur dass der größte Score gewählt wird
 # n_estimators: Wähle die Anzahl der Entscheidungsbäume, die trainiert werden sollen
 # patients_batch_size: spielt hier gerade keine Rolle
-res = test_k_federated_algorithm_for_each_balance_step_iterative(balance_step=0.1,
+""" res = test_k_federated_algorithm_for_each_balance_step_iterative(balance_step=0.1,
                                                                  test_size=0.2,
                                                                  k=2,
                                                                  n_type="batch",
                                                                  var_choosing_next_database="iterate",
                                                                  n_batch_size=10,
                                                                  n_estimators=50,
-                                                                 patients_batch_size=10)
+                                                                 patients_batch_size=10) """
 # print(res)
 
 # balance_step, test_size, k, patients_batch_size wie oben

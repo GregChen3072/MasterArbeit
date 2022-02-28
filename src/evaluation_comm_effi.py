@@ -65,8 +65,7 @@ for train_index, test_index in sss.split(X, y):
 print('Processing results...')
 
 
-res_comm_effi_flat = [
-    res for sublist in res_comm_effi for res in sublist]
+res_comm_effi_flat = [res for sublist in res_comm_effi for res in sublist]
 
 
 df_res_comm_effi = pd.DataFrame(
@@ -75,11 +74,8 @@ df_res_comm_effi = pd.DataFrame(
              'AUC Score', 'ACC Score']
 )
 
-# print(df_res_comm_effi.head())
-
 df_res_comm_effi.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_comm_effi_HCC.csv',
-    index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_comm_effi_HCC.csv', index=False, header=True)
 
 
 print('Results saved for Test Comm Effi. ')
