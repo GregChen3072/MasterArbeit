@@ -118,7 +118,7 @@ print('Processing results...')
              'AUC Score', 'ACC Score']
 )
 
-df_1_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_1_1_ILPD.csv',
+df_1_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_1.csv',
               index=False, header=True)
 
 print('Results saved for pipeline 1 1. ') """
@@ -131,7 +131,7 @@ df_2_1 = pd.DataFrame(
              'AUC Score', 'ACC Score']
 )
 
-df_2_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_1_ILPD.csv',
+df_2_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_2_1.csv',
               index=False, header=True)
 
 print('Results saved for pipeline 2 1. ') """
@@ -143,7 +143,7 @@ df_3_1 = pd.DataFrame(
     columns=['s', 'r', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
-df_3_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_1_HCC.csv',
+df_3_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_3_1.csv',
               index=False, header=True)
 print('Results saved for pipeline 2 1. ') """
 
@@ -160,7 +160,7 @@ df_2_2_unweighted = pd.DataFrame(
 print(df_2_2_unweighted)
 
 df_2_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_unweighted_ILPD.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_2_unweighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 unweighted. ')
 
@@ -177,7 +177,7 @@ df_2_2_weighted = pd.DataFrame(
 print(df_2_2_weighted)
 
 df_2_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_weighted_ILPD.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_2_weighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 weighted. ')
 
@@ -194,7 +194,7 @@ df_3_2_unweighted = pd.DataFrame(
 print(df_3_2_unweighted)
 
 df_3_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_unweighted_ILPD.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_3_2_unweighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 3 2 unweighted. ')
 
@@ -211,7 +211,7 @@ df_3_2_weighted = pd.DataFrame(
 print(df_3_2_weighted)
 
 df_3_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_weighted_ILPD.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_3_2_weighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 3 2 weighted. ')
 

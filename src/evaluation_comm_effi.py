@@ -75,7 +75,7 @@ df_res_comm_effi = pd.DataFrame(
 )
 
 df_res_comm_effi.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_comm_effi_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_comm_effi.csv', index=False, header=True)
 
 
 print('Results saved for Test Comm Effi. ')
