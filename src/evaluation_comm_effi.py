@@ -6,7 +6,7 @@ from db_simulator import load_credit_card_fraud_data, load_HCC_data, load_ILPD_d
 from sklearn.model_selection import StratifiedShuffleSplit
 from ref.database import Database
 
-from pipeline_3_1 import pipeline_3_1_comm_effi
+from pipeline_1_3 import pipeline_1_3_comm_effi
 
 # Utils
 import pandas as pd
@@ -56,7 +56,7 @@ for train_index, test_index in sss.split(X, y):
             # Communication Efficiency Test
             # #e = 1 (number of estimators collected per site per round)
             # #s = [10, 20, 50] (numbers of sites)
-            results = pipeline_3_1_comm_effi(X_train, X_test, y_train,
+            results = pipeline_1_3_comm_effi(X_train, X_test, y_train,
                                              y_test, e=e, r=r, s=sss_counter)
             # Collect 100 * 5 * 4 * 4
             res_comm_effi.append(results)

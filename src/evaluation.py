@@ -12,11 +12,11 @@ from sklearn.ensemble import AdaBoostClassifier
 from ref.database import Database
 
 from pipeline_1_1 import pipeline_1_1
-from pipeline_2_1 import pipeline_2_1
-from pipeline_3_1 import pipeline_3_1
+from pipeline_1_2 import pipeline_1_2
+from pipeline_1_3 import pipeline_1_3
 
 from pipeline_2_2 import pipeline_2_2_unweighted, pipeline_2_2_weighted
-from pipeline_3_2 import pipeline_3_2_unweighted, pipeline_3_2_weighted
+from pipeline_2_3 import pipeline_2_3_unweighted, pipeline_2_3_weighted
 
 # Utils
 import pandas as pd
@@ -47,13 +47,13 @@ sss.get_n_splits(X, y)
 
 # Container of results of 1000 repetitions
 results_1_1 = list()
-results_2_1 = list()
-results_3_1 = list()
+results_1_2 = list()
+results_1_3 = list()
 
 results_2_2_unweighted = list()
-results_3_2_unweighted = list()
+results_2_3_unweighted = list()
 results_2_2_weighted = list()
-results_3_2_weighted = list()
+results_2_3_weighted = list()
 
 sss_counter = 0
 
@@ -73,18 +73,18 @@ for train_index, test_index in sss.split(X, y):
     """ res_1_1 = pipeline_1_1(X_train, X_test, y_train, y_test, s=sss_counter, E=E)
     results_1_1.append(res_1_1) """
 
-    # Pipeline 2 1 (implementation completed)
+    # Pipeline 1 2 (implementation completed)
     """ N = [1, 2, 5, 10, 20, 50, 100]
-    res_2_1 = pipeline_2_1(X_train, X_test, y_train, y_test,
+    res_1_2 = pipeline_1_2(X_train, X_test, y_train, y_test,
                           s=sss_counter, N=N, E=E)
-    results_2_1.append(res_2_1) """
+    results_1_2.append(res_1_2) """
 
-    # Pipeline 3 1 (implementation completed)
+    # Pipeline 1 3 (implementation completed)
     """ N = [1, 2, 5, 10, 20, 50, 100]
     # E = 500
-    res_3_1 = pipeline_3_1(X_train, X_test, y_train, y_test,
+    res_1_3 = pipeline_1_3(X_train, X_test, y_train, y_test,
                            s=sss_counter, N=N, E=E, r=1)
-    results_3_1.append(res_3_1) """
+    results_1_3.append(res_1_3) """
 
     ''' Part II '''
 
@@ -98,15 +98,15 @@ for train_index, test_index in sss.split(X, y):
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
     results_2_2_weighted.append(res_2_2_weighted)
 
-    # Pipeline 3 2 unweighted (implementation completed)
-    res_3_2_unweighted = pipeline_3_2_unweighted(
+    # Pipeline 2 3 unweighted (implementation completed)
+    res_2_3_unweighted = pipeline_2_3_unweighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_3_2_unweighted.append(res_3_2_unweighted)
+    results_2_3_unweighted.append(res_2_3_unweighted)
 
-    # Pipeline 3 2 weighted (implementation completed)
-    res_3_2_weighted = pipeline_3_2_weighted(
+    # Pipeline 2 3 weighted (implementation completed)
+    res_2_3_weighted = pipeline_2_3_weighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_3_2_weighted.append(res_3_2_weighted)
+    results_2_3_weighted.append(res_2_3_weighted)
 
 
 print('Processing results...')
@@ -123,29 +123,29 @@ df_1_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_1.csv',
 
 print('Results saved for pipeline 1 1. ') """
 
-# Saving results for 2 1
-""" res_2_1_flat = [res for sublist in results_2_1 for res in sublist]
-df_2_1 = pd.DataFrame(
-    res_2_1_flat,
+# Saving results for 1 2
+""" res_1_2_flat = [res for sublist in results_1_2 for res in sublist]
+df_1_2 = pd.DataFrame(
+    res_1_2_flat,
     columns=['s', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
 
-df_2_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_2_1.csv',
+df_1_2.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_2.csv',
               index=False, header=True)
 
-print('Results saved for pipeline 2 1. ') """
+print('Results saved for pipeline 1 2. ') """
 
-# Saving results for 3 1
-""" res_3_1_flat = [res for sublist in results_3_1 for res in sublist]
-df_3_1 = pd.DataFrame(
-    res_3_1_flat,
+# Saving results for 1 3
+""" res_1_3_flat = [res for sublist in results_1_3 for res in sublist]
+df_1_3 = pd.DataFrame(
+    res_1_3_flat,
     columns=['s', 'r', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
-df_3_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_3_1.csv',
+df_1_3.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_3.csv',
               index=False, header=True)
-print('Results saved for pipeline 2 1. ') """
+print('Results saved for pipeline 1 2. ') """
 
 # Saving results for 2 2 unweighted
 res_2_2_unweighted_flat = [
@@ -181,39 +181,39 @@ df_2_2_weighted.to_csv(
 
 print('Results saved for pipeline 2 2 weighted. ')
 
-# Saving results for 3 2 unweighted
-res_3_2_unweighted_flat = [
-    res for sublist in results_3_2_unweighted for res in sublist]
+# Saving results for 2 3 unweighted
+res_2_3_unweighted_flat = [
+    res for sublist in results_2_3_unweighted for res in sublist]
 
-df_3_2_unweighted = pd.DataFrame(
-    res_3_2_unweighted_flat,
+df_2_3_unweighted = pd.DataFrame(
+    res_2_3_unweighted_flat,
     columns=['s', 'Degree Imbalance', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
 
-print(df_3_2_unweighted)
+print(df_2_3_unweighted)
 
-df_3_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_3_2_unweighted.csv', index=False, header=True)
+df_2_3_unweighted.to_csv(
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_3_unweighted.csv', index=False, header=True)
 
-print('Results saved for pipeline 3 2 unweighted. ')
+print('Results saved for pipeline 2 3 unweighted. ')
 
-# Saving results for 3 2 weighted
-res_3_2_weighted_flat = [
-    res for sublist in results_3_2_weighted for res in sublist]
+# Saving results for 2 3 weighted
+res_2_3_weighted_flat = [
+    res for sublist in results_2_3_weighted for res in sublist]
 
-df_3_2_weighted = pd.DataFrame(
-    res_3_2_weighted_flat,
+df_2_3_weighted = pd.DataFrame(
+    res_2_3_weighted_flat,
     columns=['s', 'Degree Imbalance', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
 
-print(df_3_2_weighted)
+print(df_2_3_weighted)
 
-df_3_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_3_2_weighted.csv', index=False, header=True)
+df_2_3_weighted.to_csv(
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_3_weighted.csv', index=False, header=True)
 
-print('Results saved for pipeline 3 2 weighted. ')
+print('Results saved for pipeline 2 3 weighted. ')
 
 
 print('Experiments completed! ')

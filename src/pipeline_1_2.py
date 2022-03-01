@@ -21,7 +21,7 @@ from ref.combiner import CombinedAdaBoostClassifier
 import time
 
 
-def pipeline_2_1(X_train, X_test, y_train, y_test, s, N, E):
+def pipeline_1_2(X_train, X_test, y_train, y_test, s, N, E):
 
     # Settings
     # ns = ns

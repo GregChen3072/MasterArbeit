@@ -12,7 +12,7 @@ from ref.classifier import Classifier
 from ref.main import make_iterative_classifier, make_weighted_iterative_classifier
 
 
-def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, s, E):
+def pipeline_2_3_unweighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
     n_estimators = E
     n_db = 2
@@ -100,7 +100,7 @@ def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, s, E):
     return results
 
 
-def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, s, E):
+def pipeline_2_3_weighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
     n_estimators = E
     n_db = 2

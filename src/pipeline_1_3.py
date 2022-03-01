@@ -14,7 +14,7 @@ from ref.classifier import Classifier
 from ref.main import make_iterative_classifier
 
 
-def pipeline_3_1(X_train, X_test, y_train, y_test, s, N, E, r=1):
+def pipeline_1_3(X_train, X_test, y_train, y_test, s, N, E, r=1):
 
     # Settings
     # E = E
@@ -80,7 +80,7 @@ def pipeline_3_1(X_train, X_test, y_train, y_test, s, N, E, r=1):
     return results
 
 
-def pipeline_3_1_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
+def pipeline_1_3_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
 
     # Settings
     degrees_of_data_dispersion = [1, 2, 5, 10]  # [1, 2, 5, 10, 20]
