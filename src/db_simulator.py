@@ -60,6 +60,10 @@ def load_ILPD_data():
     return X, y
 
 
+def load_TCGA_BRCA_data():
+    pass
+
+
 def make_database(x, y):
     return Database(x, y)
 

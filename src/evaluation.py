@@ -37,7 +37,7 @@ X, y = load_HCC_data()
 
 E = 500  # Number of all estimators to be collected (from all sites all rounds)
 # n_estimators = 500 set as default for binary inter-site imbalance
-n_splits = 2  # 100
+n_splits = 100  # 100
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=6)
 sss.get_n_splits(X, y)
@@ -94,19 +94,19 @@ for train_index, test_index in sss.split(X, y):
     results_2_2_unweighted.append(res_2_2_unweighted)
 
     # Pipeline 2 2 weighted (implementation completed)
-    """ res_2_2_weighted = pipeline_2_2_weighted(
+    res_2_2_weighted = pipeline_2_2_weighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_2_2_weighted.append(res_2_2_weighted) """
+    results_2_2_weighted.append(res_2_2_weighted)
 
     # Pipeline 3 2 unweighted (implementation completed)
-    """ res_3_2_unweighted = pipeline_3_2_unweighted(
+    res_3_2_unweighted = pipeline_3_2_unweighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_3_2_unweighted.append(res_3_2_unweighted) """
+    results_3_2_unweighted.append(res_3_2_unweighted)
 
     # Pipeline 3 2 weighted (implementation completed)
-    """ res_3_2_weighted = pipeline_3_2_weighted(
+    res_3_2_weighted = pipeline_3_2_weighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_3_2_weighted.append(res_3_2_weighted) """
+    results_3_2_weighted.append(res_3_2_weighted)
 
 
 print('Processing results...')
@@ -160,12 +160,12 @@ df_2_2_unweighted = pd.DataFrame(
 print(df_2_2_unweighted)
 
 df_2_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/test_vis_2_2_unweighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_unweighted_HCC.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 unweighted. ')
 
 # Saving results for 2 2 weighted
-""" res_2_2_weighted_flat = [
+res_2_2_weighted_flat = [
     res for sublist in results_2_2_weighted for res in sublist]
 
 df_2_2_weighted = pd.DataFrame(
@@ -177,12 +177,12 @@ df_2_2_weighted = pd.DataFrame(
 print(df_2_2_weighted)
 
 df_2_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/test_vis_2_2_weighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_weighted_HCC.csv', index=False, header=True)
 
-print('Results saved for pipeline 2 2 weighted. ') """
+print('Results saved for pipeline 2 2 weighted. ')
 
 # Saving results for 3 2 unweighted
-""" res_3_2_unweighted_flat = [
+res_3_2_unweighted_flat = [
     res for sublist in results_3_2_unweighted for res in sublist]
 
 df_3_2_unweighted = pd.DataFrame(
@@ -194,12 +194,12 @@ df_3_2_unweighted = pd.DataFrame(
 print(df_3_2_unweighted)
 
 df_3_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/test_vis_3_2_unweighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_unweighted_HCC.csv', index=False, header=True)
 
-print('Results saved for pipeline 3 2 unweighted. ') """
+print('Results saved for pipeline 3 2 unweighted. ')
 
 # Saving results for 3 2 weighted
-""" res_3_2_weighted_flat = [
+res_3_2_weighted_flat = [
     res for sublist in results_3_2_weighted for res in sublist]
 
 df_3_2_weighted = pd.DataFrame(
@@ -211,9 +211,9 @@ df_3_2_weighted = pd.DataFrame(
 print(df_3_2_weighted)
 
 df_3_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/test_vis_3_2_weighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_weighted_HCC.csv', index=False, header=True)
 
-print('Results saved for pipeline 3 2 weighted. ') """
+print('Results saved for pipeline 3 2 weighted. ')
 
 
 print('Experiments completed! ')

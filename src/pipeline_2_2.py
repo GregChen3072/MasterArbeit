@@ -1,18 +1,11 @@
 # User defined functions
-from numpy.lib.function_base import blackman
 from db_simulator import simulate_db_size_imbalance
 
 # Model Evaluation
 from scoring import make_scores
 
 # Reference
-from ref.main import make_iterative_classifier
-from ref.main import make_not_iterative_classifier
-from ref.database import Database
 from ref.combiner import CombinedAdaBoostClassifier
-
-# Utils
-import time
 
 
 def pipeline_2_2_unweighted(X_train, X_test, y_train, y_test, s, E):
@@ -90,7 +83,7 @@ def pipeline_2_2_weighted(X_train, X_test, y_train, y_test, s, E):
 
     # Print title
     print()
-    print("Federation Non-iterative not Weighted")
+    print("Federation Non-iterative Weighted")
 
     # Initialize
     results = list()

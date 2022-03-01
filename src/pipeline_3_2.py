@@ -11,9 +11,6 @@ from ref.classifier import WarmStartAdaBoostClassifier
 from ref.classifier import Classifier
 from ref.main import make_iterative_classifier, make_weighted_iterative_classifier
 
-# Utils
-import time
-
 
 def pipeline_3_2_unweighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
@@ -127,7 +124,7 @@ def pipeline_3_2_weighted(X_train, X_test, y_train, y_test, s, E):
 
     # Print title
     print()
-    print("Federation Iterative not Weighted")
+    print("Federation Iterative Weighted")
 
     # Initialize
     results = list()
