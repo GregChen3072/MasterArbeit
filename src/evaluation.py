@@ -32,8 +32,8 @@ def make_database(x, y):
 
 # X, y = load_breast_cancer(return_X_y=True)
 # X, y = load_credit_card_fraud_data()
-X, y = load_HCC_data()
-# X, y = load_ILPD_data()
+# X, y = load_HCC_data()
+X, y = load_ILPD_data()
 
 E = 500  # Number of all estimators to be collected (from all sites all rounds)
 # n_estimators = 500 set as default for binary inter-site imbalance
@@ -160,7 +160,7 @@ df_2_2_unweighted = pd.DataFrame(
 print(df_2_2_unweighted)
 
 df_2_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_unweighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_unweighted_ILPD.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 unweighted. ')
 
@@ -177,7 +177,7 @@ df_2_2_weighted = pd.DataFrame(
 print(df_2_2_weighted)
 
 df_2_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_weighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_2_2_weighted_ILPD.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 weighted. ')
 
@@ -194,7 +194,7 @@ df_3_2_unweighted = pd.DataFrame(
 print(df_3_2_unweighted)
 
 df_3_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_unweighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_unweighted_ILPD.csv', index=False, header=True)
 
 print('Results saved for pipeline 3 2 unweighted. ')
 
@@ -211,7 +211,7 @@ df_3_2_weighted = pd.DataFrame(
 print(df_3_2_weighted)
 
 df_3_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_weighted_HCC.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_3_2_weighted_ILPD.csv', index=False, header=True)
 
 print('Results saved for pipeline 3 2 weighted. ')
 
