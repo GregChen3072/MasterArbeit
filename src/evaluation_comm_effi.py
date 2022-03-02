@@ -20,12 +20,12 @@ def make_database(x, y):
 
 
 # X, y = load_breast_cancer(return_X_y=True)
-X, y = load_HCC_data()
-# X, y = load_credit_card_fraud_data()
+# X, y = load_HCC_data()
+X, y = load_credit_card_fraud_data()
 # X, y = load_ILPD_data()
 
 # Settings Evaluation
-n_splits = 100
+n_splits = 1
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=6)
 sss.get_n_splits(X, y)
@@ -70,12 +70,12 @@ res_comm_effi_flat = [res for sublist in res_comm_effi for res in sublist]
 
 df_res_comm_effi = pd.DataFrame(
     res_comm_effi_flat,
-    columns=['s', 'r', 'v', 'n', 'e', 'F_1 Score', 'MCC Score',
-             'AUC Score', 'ACC Score']
+    columns=['s', 'r', 'v', 'n', 'e', 'f_1', 'mcc',
+             'auc', 'acc']
 )
 
 df_res_comm_effi.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_comm_effi.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_Cred_comm_effi.csv', index=False, header=True)
 
 
 print('Results saved for Test Comm Effi. ')
