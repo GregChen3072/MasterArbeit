@@ -5,6 +5,7 @@ from db_simulator import simulate_n_databases_with_equal_sample_size
 from scoring import make_scores
 
 # Reference
+from ref.database import Database
 from ref.next_n_size import NextN
 from ref.next_n_size import NextDataSets
 from ref.classifier import WarmStartAdaBoostClassifier
@@ -83,7 +84,8 @@ def pipeline_1_3(X_train, X_test, y_train, y_test, s, N, E, r=1):
 def pipeline_1_3_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
 
     # Settings
-    degrees_of_data_dispersion = [1, 2, 5, 10]  # [1, 2, 5, 10, 20]
+    # degrees_of_data_dispersion = [1, 2, 5, 10]  # [1, 2, 5, 10, 20]
+    degrees_of_data_dispersion = [3, 5, 10]
     n_rounds = r  # Wertebereich [1:5]
     n_estimators_per_site_per_round = e  # e = {1, 2, 5, 10}
     # n_estimators E = e * n * r
@@ -139,7 +141,7 @@ def pipeline_1_3_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
             #print("Index: "+str(index))
             #print("Length Databases: "+str(len(databases)))
             current_database = n_dbs[index]  # wählt die nächste Datenbank
-            classifier = current_database.extend_classifier(
+            classifier = current_database.extend_bootstrap_fit(
                 classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
             classifier_iterator.update_classifier(
                 classifier)  # updatet den Klassifizierer

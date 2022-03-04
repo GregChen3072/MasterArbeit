@@ -19,9 +19,9 @@ def make_database(x, y):
     return Database(x, y)
 
 
-# X, y = load_breast_cancer(return_X_y=True)
+X, y = load_breast_cancer(return_X_y=True)
 # X, y = load_HCC_data()
-X, y = load_credit_card_fraud_data()
+# X, y = load_credit_card_fraud_data()
 # X, y = load_ILPD_data()
 
 # Settings Evaluation
@@ -49,9 +49,11 @@ for train_index, test_index in sss.split(X, y):
     y_train, y_test = y[train_index], y[test_index]
 
     ''' Part III '''
-    for r in range(1, 6):
+    # for r in range(1, 6):
+    for r in range(2, 3):
 
-        for e in [1, 2, 5, 10]:
+        # for e in [1, 2, 5, 10]:
+        for e in [5, 10]:
             # Pipeline 3 1
             # Communication Efficiency Test
             # #e = 1 (number of estimators collected per site per round)

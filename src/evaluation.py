@@ -80,33 +80,33 @@ for train_index, test_index in sss.split(X, y):
     results_1_2.append(res_1_2) """
 
     # Pipeline 1 3 (implementation completed)
-    """ N = [1, 2, 5, 10, 20, 50, 100]
+    N = [1, 2, 5, 10, 20, 50, 100]
     # E = 500
     res_1_3 = pipeline_1_3(X_train, X_test, y_train, y_test,
-                           s=sss_counter, N=N, E=E, r=1)
-    results_1_3.append(res_1_3) """
+                           s=sss_counter, N=N, E=E, r=4)
+    results_1_3.append(res_1_3)
 
     ''' Part II '''
 
     # Pipeline 2 2 unweighted (implementation completed)
-    res_2_2_unweighted = pipeline_2_2_unweighted(
+    """ res_2_2_unweighted = pipeline_2_2_unweighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_2_2_unweighted.append(res_2_2_unweighted)
+    results_2_2_unweighted.append(res_2_2_unweighted) """
 
     # Pipeline 2 2 weighted (implementation completed)
-    res_2_2_weighted = pipeline_2_2_weighted(
+    """ res_2_2_weighted = pipeline_2_2_weighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_2_2_weighted.append(res_2_2_weighted)
+    results_2_2_weighted.append(res_2_2_weighted) """
 
     # Pipeline 2 3 unweighted (implementation completed)
-    res_2_3_unweighted = pipeline_2_3_unweighted(
+    """ res_2_3_unweighted = pipeline_2_3_unweighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_2_3_unweighted.append(res_2_3_unweighted)
+    results_2_3_unweighted.append(res_2_3_unweighted) """
 
     # Pipeline 2 3 weighted (implementation completed)
-    res_2_3_weighted = pipeline_2_3_weighted(
+    """ res_2_3_weighted = pipeline_2_3_weighted(
         X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_2_3_weighted.append(res_2_3_weighted)
+    results_2_3_weighted.append(res_2_3_weighted) """
 
 
 print('Processing results...')
@@ -137,18 +137,18 @@ df_1_2.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_2.csv',
 print('Results saved for pipeline 1 2. ') """
 
 # Saving results for 1 3
-""" res_1_3_flat = [res for sublist in results_1_3 for res in sublist]
+res_1_3_flat = [res for sublist in results_1_3 for res in sublist]
 df_1_3 = pd.DataFrame(
     res_1_3_flat,
     columns=['s', 'r', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
-df_1_3.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_3.csv',
+df_1_3.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_3_r_4.csv',
               index=False, header=True)
-print('Results saved for pipeline 1 2. ') """
+print('Results saved for pipeline 1 2. ')
 
 # Saving results for 2 2 unweighted
-res_2_2_unweighted_flat = [
+""" res_2_2_unweighted_flat = [
     res for sublist in results_2_2_unweighted for res in sublist]
 
 df_2_2_unweighted = pd.DataFrame(
@@ -162,10 +162,10 @@ print(df_2_2_unweighted)
 df_2_2_unweighted.to_csv(
     '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_2_unweighted.csv', index=False, header=True)
 
-print('Results saved for pipeline 2 2 unweighted. ')
+print('Results saved for pipeline 2 2 unweighted. ') """
 
 # Saving results for 2 2 weighted
-res_2_2_weighted_flat = [
+""" res_2_2_weighted_flat = [
     res for sublist in results_2_2_weighted for res in sublist]
 
 df_2_2_weighted = pd.DataFrame(
@@ -179,10 +179,10 @@ print(df_2_2_weighted)
 df_2_2_weighted.to_csv(
     '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_2_weighted.csv', index=False, header=True)
 
-print('Results saved for pipeline 2 2 weighted. ')
+print('Results saved for pipeline 2 2 weighted. ') """
 
 # Saving results for 2 3 unweighted
-res_2_3_unweighted_flat = [
+""" res_2_3_unweighted_flat = [
     res for sublist in results_2_3_unweighted for res in sublist]
 
 df_2_3_unweighted = pd.DataFrame(
@@ -196,10 +196,10 @@ print(df_2_3_unweighted)
 df_2_3_unweighted.to_csv(
     '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_3_unweighted.csv', index=False, header=True)
 
-print('Results saved for pipeline 2 3 unweighted. ')
+print('Results saved for pipeline 2 3 unweighted. ') """
 
 # Saving results for 2 3 weighted
-res_2_3_weighted_flat = [
+""" res_2_3_weighted_flat = [
     res for sublist in results_2_3_weighted for res in sublist]
 
 df_2_3_weighted = pd.DataFrame(
@@ -213,7 +213,7 @@ print(df_2_3_weighted)
 df_2_3_weighted.to_csv(
     '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_3_weighted.csv', index=False, header=True)
 
-print('Results saved for pipeline 2 3 weighted. ')
+print('Results saved for pipeline 2 3 weighted. ') """
 
 
 print('Experiments completed! ')

@@ -48,13 +48,6 @@ def make_iterative_classifier(databases: list,
                                     next_type=var_choosing_next_database,
                                     accuracy_batch_size=patients_batch_size)
 
-    # i = 0
-
-    res_f_1 = list()
-    res_mcc = list()
-    res_auc = list()
-    res_acc = list()  # Score Containers
-
     i = 0
     while classifier_iterator.finished() is False:
         # This while loop: One iteration indicates one visit to the next DB in turn.
@@ -70,25 +63,6 @@ def make_iterative_classifier(databases: list,
             classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
         classifier_iterator.update_classifier(
             classifier)  # updatet den Klassifizierer
-        """ f_1, mcc, auc, acc = make_scores(
-            classifier_iterator.classifier, test_x, test_y)
-        print(
-            "v" + str(i) +
-            "\t" +
-            str(n) +
-            "\t" +
-            str(r) +
-            "\t" +
-            str(e) +
-            "\t" +
-            str(round(f_1, 5)) +
-            "\t\t" +
-            str(round(mcc, 5)) +
-            "\t\t" +
-            str(round(auc, 5)) +
-            "\t\t" +
-            str(round(acc, 5))
-        ) """
         # print("Round finished.")
     # print("classifier finished.")
     return classifier
