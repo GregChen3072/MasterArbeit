@@ -19,13 +19,13 @@ def make_database(x, y):
     return Database(x, y)
 
 
-X, y = load_breast_cancer(return_X_y=True)
-# X, y = load_HCC_data()
+# X, y = load_breast_cancer(return_X_y=True)
+X, y = load_HCC_data()
 # X, y = load_credit_card_fraud_data()
 # X, y = load_ILPD_data()
 
 # Settings Evaluation
-n_splits = 1
+n_splits = 100
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=6)
 sss.get_n_splits(X, y)
@@ -50,10 +50,10 @@ for train_index, test_index in sss.split(X, y):
 
     ''' Part III '''
     # for r in range(1, 6):
-    for r in range(2, 3):
+    for r in range(20, 21):
 
         # for e in [1, 2, 5, 10]:
-        for e in [5, 10]:
+        for e in [1, 2, 5]:
             # Pipeline 3 1
             # Communication Efficiency Test
             # #e = 1 (number of estimators collected per site per round)
@@ -77,7 +77,7 @@ df_res_comm_effi = pd.DataFrame(
 )
 
 df_res_comm_effi.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_Cred_comm_effi.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_comm_effi.csv', index=False, header=True)
 
 
 print('Results saved for Test Comm Effi. ')

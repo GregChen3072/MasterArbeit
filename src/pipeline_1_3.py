@@ -85,7 +85,7 @@ def pipeline_1_3_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
 
     # Settings
     # degrees_of_data_dispersion = [1, 2, 5, 10]  # [1, 2, 5, 10, 20]
-    degrees_of_data_dispersion = [3, 5, 10]
+    degrees_of_data_dispersion = [2, 5, 10, 20]
     n_rounds = r  # Wertebereich [1:5]
     n_estimators_per_site_per_round = e  # e = {1, 2, 5, 10}
     # n_estimators E = e * n * r
@@ -141,8 +141,11 @@ def pipeline_1_3_comm_effi(X_train, X_test, y_train, y_test, e, r, s):
             #print("Index: "+str(index))
             #print("Length Databases: "+str(len(databases)))
             current_database = n_dbs[index]  # wählt die nächste Datenbank
-            classifier = current_database.extend_bootstrap_fit(
-                classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
+
+            # erweitert auf der ausgewählten Datenbank den Klassifizieren
+            # classifier = current_database.extend_classifier(classifier)
+            classifier = current_database.extend_bootstrap_fit(classifier)
+
             classifier_iterator.update_classifier(
                 classifier)  # updatet den Klassifizierer
             f_1, mcc, auc, acc = make_scores(

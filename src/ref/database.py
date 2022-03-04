@@ -33,9 +33,9 @@ class Database:
     def extend_bootstrap_fit(self, classifier):
         X = self.x
         y = self.y
+        # sss = ShuffleSplit(n_splits=5, test_size=random.uniform(0.7, 0.9), random_state=random.randint(0, 100))
         sss = ShuffleSplit(
-            n_splits=5, test_size=random.uniform(0.5, 1), random_state=random.randint(0, 100))
-
+            n_splits=1, train_size=0.5, random_state=random.randint(0, 100))
         for train_index, test_index in sss.split(X, y):
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
