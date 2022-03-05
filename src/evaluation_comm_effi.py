@@ -20,9 +20,9 @@ def make_database(x, y):
 
 
 # X, y = load_breast_cancer(return_X_y=True)
-X, y = load_HCC_data()
+# X, y = load_HCC_data()
 # X, y = load_credit_card_fraud_data()
-# X, y = load_ILPD_data()
+X, y = load_ILPD_data()
 
 # Settings Evaluation
 n_splits = 100
@@ -77,7 +77,7 @@ df_res_comm_effi = pd.DataFrame(
 )
 
 df_res_comm_effi.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_comm_effi.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_comm_effi.csv', index=False, header=True)
 
 
 print('Results saved for Test Comm Effi. ')
