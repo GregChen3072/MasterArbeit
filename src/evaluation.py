@@ -30,10 +30,10 @@ def make_database(x, y):
     return Database(x, y)
 
 
-# X, y = load_breast_cancer(return_X_y=True)
+X, y = load_breast_cancer(return_X_y=True)
 # X, y = load_credit_card_fraud_data()
 # X, y = load_HCC_data()
-X, y = load_ILPD_data()
+# X, y = load_ILPD_data()
 
 E = 500  # Number of all estimators to be collected (from all sites all rounds)
 # n_estimators = 500 set as default for binary inter-site imbalance
@@ -70,20 +70,21 @@ for train_index, test_index in sss.split(X, y):
 
     # Pipeline 1 1 (implementation completed)
     # When all data centralized in one database.
-    """ res_1_1 = pipeline_1_1(X_train, X_test, y_train, y_test, s=sss_counter, E=E)
-    results_1_1.append(res_1_1) """
+    res_1_1 = pipeline_1_1(X_train, X_test, y_train,
+                           y_test, s=sss_counter, E=E)
+    results_1_1.append(res_1_1)
 
     # Pipeline 1 2 (implementation completed)
-    """ N = [1, 2, 5, 10, 20, 50, 100]
+    N = [1, 2, 5, 10, 20, 50, 100]
     res_1_2 = pipeline_1_2(X_train, X_test, y_train, y_test,
-                          s=sss_counter, N=N, E=E)
-    results_1_2.append(res_1_2) """
+                           s=sss_counter, N=N, E=E)
+    results_1_2.append(res_1_2)
 
     # Pipeline 1 3 (implementation completed)
     N = [1, 2, 5, 10, 20, 50, 100]
     # E = 500
     res_1_3 = pipeline_1_3(X_train, X_test, y_train, y_test,
-                           s=sss_counter, N=N, E=E, r=4)
+                           s=sss_counter, N=N, E=E, r=1)
     results_1_3.append(res_1_3)
 
     ''' Part II '''
@@ -112,29 +113,33 @@ for train_index, test_index in sss.split(X, y):
 print('Processing results...')
 
 # Saving results for 1 1
-""" df_1_1 = pd.DataFrame(
+df_1_1 = pd.DataFrame(
     results_1_1,
     columns=['s', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
 
-df_1_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_1.csv',
+df_1_1.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_1_1.csv',
+              index=False, header=True)
+df_1_1.to_csv('/Users/greg/Documents/thesis/output/vis_BRCA_1_1.csv',
               index=False, header=True)
 
-print('Results saved for pipeline 1 1. ') """
+print('Results saved for pipeline 1 1. ')
 
 # Saving results for 1 2
-""" res_1_2_flat = [res for sublist in results_1_2 for res in sublist]
+res_1_2_flat = [res for sublist in results_1_2 for res in sublist]
 df_1_2 = pd.DataFrame(
     res_1_2_flat,
     columns=['s', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
 
-df_1_2.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_2.csv',
+df_1_2.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_1_2.csv',
+              index=False, header=True)
+df_1_2.to_csv('/Users/greg/Documents/thesis/output/vis_BRCA_1_2.csv',
               index=False, header=True)
 
-print('Results saved for pipeline 1 2. ') """
+print('Results saved for pipeline 1 2. ')
 
 # Saving results for 1 3
 res_1_3_flat = [res for sublist in results_1_3 for res in sublist]
@@ -143,8 +148,11 @@ df_1_3 = pd.DataFrame(
     columns=['s', 'r', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
-df_1_3.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_HCC_1_3_r_4.csv',
+df_1_3.to_csv('/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_1_3.csv',
               index=False, header=True)
+df_1_3.to_csv('/Users/greg/Documents/thesis/output/vis_BRCA_1_3.csv',
+              index=False, header=True)
+
 print('Results saved for pipeline 1 2. ')
 
 # Saving results for 2 2 unweighted
@@ -160,7 +168,9 @@ df_2_2_unweighted = pd.DataFrame(
 print(df_2_2_unweighted)
 
 df_2_2_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_2_unweighted.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_2_2_unweighted.csv', index=False, header=True)   
+df_2_2_unweighted.to_csv(
+    '/Users/greg/Documents/thesis/output/vis_BRCA_2_2_unweighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 unweighted. ') """
 
@@ -177,8 +187,9 @@ df_2_2_weighted = pd.DataFrame(
 print(df_2_2_weighted)
 
 df_2_2_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_2_weighted.csv', index=False, header=True)
-
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_2_2_weighted.csv', index=False, header=True)
+df_2_2_weighted.to_csv(
+    '/Users/greg/Documents/thesis/output/vis_BRCA_2_2_weighted.csv', index=False, header=True)
 print('Results saved for pipeline 2 2 weighted. ') """
 
 # Saving results for 2 3 unweighted
@@ -194,7 +205,9 @@ df_2_3_unweighted = pd.DataFrame(
 print(df_2_3_unweighted)
 
 df_2_3_unweighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_3_unweighted.csv', index=False, header=True)
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_2_3_unweighted.csv', index=False, header=True)
+df_2_3_unweighted.to_csv(
+    '/Users/greg/Documents/thesis/output/vis_BRCA_2_3_unweighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 3 unweighted. ') """
 
@@ -211,10 +224,10 @@ df_2_3_weighted = pd.DataFrame(
 print(df_2_3_weighted)
 
 df_2_3_weighted.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_2_3_weighted.csv', index=False, header=True)
-
+    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_BRCA_2_3_weighted.csv', index=False, header=True)
+df_2_3_weighted.to_csv(
+    '/Users/greg/Documents/thesis/output/vis_BRCA_2_3_weighted.csv', index=False, header=True)
 print('Results saved for pipeline 2 3 weighted. ') """
-
 
 print('Experiments completed! ')
 timer_stop = time.time()

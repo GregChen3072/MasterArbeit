@@ -58,11 +58,17 @@ def make_iterative_classifier(databases: list,
         index = database_chooser.get_next_index(classifier)
         #print("Index: "+str(index))
         #print("Length Databases: "+str(len(databases)))
-        current_database = databases[index]  # wählt die nächste Datenbank
-        classifier = current_database.extend_classifier(
-            classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
-        classifier_iterator.update_classifier(
-            classifier)  # updatet den Klassifizierer
+
+        # wählt die nächste Datenbank
+        current_database = databases[index]
+
+        # erweitert auf der ausgewählten Datenbank den Klassifizieren
+        classifier = current_database.extend_classifier(classifier)
+        # classifier = current_database.extend_bootstrap_fit(classifier)
+
+        # updatet den Klassifizierer
+        classifier_iterator.update_classifier(classifier)
+
         # print("Round finished.")
     # print("classifier finished.")
     return classifier
