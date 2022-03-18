@@ -30,17 +30,18 @@ def make_database(x, y):
     return Database(x, y)
 
 
-# X, y = load_breast_cancer(return_X_y=True)
-# X, y = load_credit_card_fraud_data()
-X, y = load_HCC_data()
-# X, y = load_ILPD_data()
+current_dataset = "BRCA"
+X, y = load_breast_cancer(return_X_y=True)
+# X, y, current_dataset = load_credit_card_fraud_data()
+# X, y, current_dataset = load_HCC_data()
+# X, y, current_dataset = load_ILPD_data()
 
 E = 500  # Number of all estimators to be collected (from all sites all rounds)
 # n_estimators = 500 set as default for binary inter-site imbalance
 n_splits = 100  # 100
 
-path_res_local = "/Users/greg/Downloads/AR_Master_Thesis/output/bootstrap/"
-path_res_cloud = "/Users/greg/Documents/thesis/output/bootstrap/"
+path_res_local = "/Users/greg/Downloads/AR_Master_Thesis/output/"
+path_res_cloud = "/Users/greg/Documents/thesis/output/"
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=6)
 sss.get_n_splits(X, y)
@@ -102,9 +103,9 @@ df_2_2_unweighted = pd.DataFrame(
 print(df_2_2_unweighted)
 
 df_2_2_unweighted.to_csv(
-    path_res_local + 'vis_BRCA_2_2_unweighted.csv', index=False, header=True)
+    path_res_local + 'vis_' + current_dataset + '_2_2_unweighted.csv', index=False, header=True)
 df_2_2_unweighted.to_csv(
-    path_res_cloud + 'vis_BRCA_2_2_unweighted.csv', index=False, header=True)
+    path_res_cloud + 'vis_' + current_dataset + '_2_2_unweighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 2 unweighted. ')
 
@@ -121,9 +122,10 @@ df_2_2_weighted = pd.DataFrame(
 print(df_2_2_weighted)
 
 df_2_2_weighted.to_csv(
-    path_res_local + 'vis_BRCA_2_2_weighted.csv', index=False, header=True)
+    path_res_local + 'vis_' + current_dataset + '_2_2_weighted.csv', index=False, header=True)
 df_2_2_weighted.to_csv(
-    path_res_cloud + 'vis_BRCA_2_2_weighted.csv', index=False, header=True)
+    path_res_cloud + 'vis_' + current_dataset + '_2_2_weighted.csv', index=False, header=True)
+
 print('Results saved for pipeline 2 2 weighted. ')
 
 # Saving results for 2 3 unweighted
@@ -139,9 +141,9 @@ df_2_3_unweighted = pd.DataFrame(
 print(df_2_3_unweighted)
 
 df_2_3_unweighted.to_csv(
-    path_res_local + 'vis_BRCA_2_3_unweighted.csv', index=False, header=True)
+    path_res_local + 'vis_' + current_dataset + '_2_3_unweighted.csv', index=False, header=True)
 df_2_3_unweighted.to_csv(
-    path_res_cloud + 'vis_BRCA_2_3_unweighted.csv', index=False, header=True)
+    path_res_cloud + 'vis_' + current_dataset + '_2_3_unweighted.csv', index=False, header=True)
 
 print('Results saved for pipeline 2 3 unweighted. ')
 
@@ -158,9 +160,10 @@ df_2_3_weighted = pd.DataFrame(
 print(df_2_3_weighted)
 
 df_2_3_weighted.to_csv(
-    path_res_local + 'vis_BRCA_2_3_weighted.csv', index=False, header=True)
+    path_res_local + 'vis_' + current_dataset + '_2_3_weighted.csv', index=False, header=True)
 df_2_3_weighted.to_csv(
-    path_res_cloud + 'vis_BRCA_2_3_weighted.csv', index=False, header=True)
+    path_res_cloud + 'vis_' + current_dataset + '_2_3_weighted.csv', index=False, header=True)
+
 print('Results saved for pipeline 2 3 weighted. ')
 
 print('Experiments completed! ')

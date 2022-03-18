@@ -14,8 +14,6 @@ import pandas as pd
 import numpy as np
 
 from ref.database import Database
-from ref.main import make_iterative_classifier
-from ref.main import make_not_iterative_classifier
 from numpy import arange
 import time
 

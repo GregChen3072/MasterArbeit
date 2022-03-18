@@ -30,9 +30,9 @@ def make_database(x, y):
     return Database(x, y)
 
 
-#current_dataset = "BRCA"
-#X, y = load_breast_cancer(return_X_y=True)
-X, y, current_dataset = load_credit_card_fraud_data()
+current_dataset = "BRCA"
+X, y = load_breast_cancer(return_X_y=True)
+# X, y, current_dataset = load_credit_card_fraud_data()
 # X, y, current_dataset = load_HCC_data()
 # X, y, current_dataset = load_ILPD_data()
 
@@ -43,10 +43,10 @@ E = 500  # Number of all estimators to be collected (from all sites all rounds)
 n_splits = 100  # 100
 
 
-path_res_local = "/Users/greg/Downloads/AR_Master_Thesis/output/bootstrap/"
-path_res_cloud = "/Users/greg/Documents/thesis/output/bootstrap/"
+path_res_local = "/Users/greg/Downloads/AR_Master_Thesis/output/"
+path_res_cloud = "/Users/greg/Documents/thesis/output/"
 
-sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=42)
+sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=6)
 sss.get_n_splits(X, y)
 
 # Settings Classifier

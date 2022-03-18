@@ -120,7 +120,6 @@ def make_unweighted_iterative_classifier(databases: list,
         current_database = databases[index]
 
         # Extend the classifier on the site that it is visiting.
-        # classifier = current_database.extend_bootstrap_fit(classifier)
         classifier = current_database.extend_classifier(classifier)
 
         # Update the classifier
@@ -169,7 +168,6 @@ def make_weighted_iterative_classifier(databases: list,
         current_database = databases[index]  # wählt die nächste Datenbank
 
         # Extend the classifier on the site that it is visiting
-        # classifier = current_database.extend_bootstrap_fit(classifier)
         classifier = current_database.extend_classifier(
             classifier)  # erweitert auf der ausgewählten Datenbank den Klassifizieren
 
