@@ -25,6 +25,7 @@ def pipeline_1_1(X_train, X_test, y_train, y_test, E, s):
         str(s) + "\t" +
         str(n) + "\t" +
         str(E) + "\t" +
+        str(1) + "\t" +
         str(round(f_1, 3)) +
         "\t\t" +
         str(round(mcc, 3)) +

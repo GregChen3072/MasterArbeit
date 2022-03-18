@@ -12,7 +12,7 @@ from ref.classifier import WarmStartAdaBoostClassifier
 from ref.classifier import Classifier
 # from sklearn.ensemble import AdaBoostClassifier
 
-from ref.main import make_iterative_classifier
+from ref.main import make_iterative_classifier_for_n_sites
 
 
 def pipeline_1_3(X_train, X_test, y_train, y_test, s, N, E, r=1):
@@ -48,7 +48,7 @@ def pipeline_1_3(X_train, X_test, y_train, y_test, s, N, E, r=1):
 
         n_dbs = n_instances_of_dispersion[i]
 
-        classifier_iterative = make_iterative_classifier(
+        classifier_iterative = make_iterative_classifier_for_n_sites(
             databases=n_dbs,  # list
             # Default: classifier=WarmStartAdaBoostClassifier()
             n_estimators=E,

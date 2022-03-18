@@ -11,11 +11,11 @@ from sklearn.ensemble import AdaBoostClassifier
 from ref.database import Database
 
 from pipeline_1_1 import pipeline_1_1
-from pipeline_2_1 import pipeline_2_1
-from pipeline_3_1 import pipeline_3_1
+from pipeline_1_2 import pipeline_1_2
+from pipeline_1_3 import pipeline_1_3
 
 from pipeline_2_2 import pipeline_2_2_unweighted, pipeline_2_2_weighted
-from pipeline_3_2 import pipeline_3_2_unweighted, pipeline_3_2_weighted
+from pipeline_2_3 import pipeline_2_3_unweighted, pipeline_2_3_weighted
 
 # Utils
 import pandas as pd

@@ -5,11 +5,7 @@ from db_simulator import simulate_db_size_imbalance
 from scoring import make_scores
 
 # Reference
-from ref.next_n_size import NextN
-from ref.next_n_size import NextDataSets
-from ref.classifier import WarmStartAdaBoostClassifier
-from ref.classifier import Classifier
-from ref.main import make_iterative_classifier, make_weighted_iterative_classifier
+from ref.main import make_unweighted_iterative_classifier, make_weighted_iterative_classifier
 
 
 def pipeline_2_3_unweighted(X_train, X_test, y_train, y_test, s, E):
@@ -45,19 +41,6 @@ def pipeline_2_3_unweighted(X_train, X_test, y_train, y_test, s, E):
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
 
-    # print()
-    # print("Settings")
-    # print(f'Number of estimators: {n_estimators}')
-    # print(f'Number of DBs: {n_db}')
-    # print(f'Number of rounds: {n_iteration}')
-    # print(
-    #     f'Number of estimators per DB per iteration: {n_batch_size}'
-    # )
-    # print()
-    # print("Progress: ")
-
-    n_visits = int(1)
-
     print("s\tDegree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
     for i in range(0, len(db_pairs)):
@@ -66,18 +49,13 @@ def pipeline_2_3_unweighted(X_train, X_test, y_train, y_test, s, E):
 
         # timer_start = time.time()
 
-        classifier_iterative = make_iterative_classifier(
+        classifier_iterative = make_unweighted_iterative_classifier(
             databases=db_pair,
             n_estimators=n_estimators,
             n_type=n_type,
             n_batch_size=n_batch_size,
             var_choosing_next_database=var_choosing_next_database
         )
-
-        # Stop timer
-        # timer_stop = time.time()
-        # timer_list.append(timer_stop - timer_start)
-        # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
         f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
 
@@ -129,25 +107,9 @@ def pipeline_2_3_weighted(X_train, X_test, y_train, y_test, s, E):
     # Initialize
     results = list()
 
-    # timer_list = list()  # Timers
-
     db_pairs = prepared_data.get("db_pairs")  # DB Pairs
     # Degrees of balance for each DB pair
     balance_list = prepared_data.get("balance_list")
-
-    """ print()
-    print("Settings")
-    print(f'Number of estimators: {n_estimators}')
-    print(f'Number of DBs: {n_db}')
-    print(f'Number of rounds: {n_iteration}')
-    print(
-        f'Number of estimators per DB per iteration: {n_batch_size}'
-    )
-    print()
-
-    print("Progress: ") """
-
-    n_visits = int(1)
 
     print("s\tDegree Imbalance\tF-1 Score\tMCC Score\tAUC Score\tACC Score")
 
@@ -155,8 +117,6 @@ def pipeline_2_3_weighted(X_train, X_test, y_train, y_test, s, E):
 
         db_pair = db_pairs[i]
         degree_of_balance = round(balance_list[i], 2)
-
-        # timer_start = time.time()
 
         classifier_iterative = make_weighted_iterative_classifier(
             databases=db_pair,
@@ -167,11 +127,6 @@ def pipeline_2_3_weighted(X_train, X_test, y_train, y_test, s, E):
             n_batch_size=n_batch_size,
             var_choosing_next_database=var_choosing_next_database
         )
-
-        # Stop timer
-        # timer_stop = time.time()
-        # timer_list.append(timer_stop - timer_start)
-        # score_federated = classifier_combined.score(prepared_data.get("test").get("X"), prepared_data.get("test").get("y"))
 
         f_1, mcc, auc, acc = make_scores(classifier_iterative, X_test, y_test)
 

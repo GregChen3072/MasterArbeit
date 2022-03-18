@@ -29,13 +29,13 @@ def load_iris_data():
 
 def load_credit_card_fraud_data():
     path = "/Users/greg/Downloads/AR_Master_Thesis/data/creditcard.csv"
-    data = pd.read_csv(path)
+    data = pd.read_csv(path).sample(n=10000, random_state=42)
 
     # Remove the 1st column because it refers to time
     X = data.iloc[:, 1:-1].to_numpy()
     y = data.iloc[:, -1].to_numpy()
 
-    return X, y
+    return X, y, "Cred"
 
 
 def load_HCC_data():
@@ -46,7 +46,7 @@ def load_HCC_data():
     X = data.iloc[:, 2:-1].to_numpy()
     y = data.iloc[:, 1].to_numpy()
 
-    return X, y
+    return X, y, "HCC"
 
 
 def load_ILPD_data():
@@ -57,7 +57,7 @@ def load_ILPD_data():
     X = data.iloc[:, 1:-1].to_numpy()
     y = data.iloc[:, -1].to_numpy()
 
-    return X, y
+    return X, y, "ILPD"
 
 
 def load_TCGA_BRCA_data():

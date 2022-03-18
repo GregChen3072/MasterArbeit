@@ -8,6 +8,7 @@ Created on Tue Aug 25 17:23:19 2020
 import math
 import random
 
+import pandas as pd
 import numpy as np
 from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit
 
@@ -31,11 +32,21 @@ class Database:
         return classifier.fit(self.x, self.y)
 
     def extend_bootstrap_fit(self, classifier):
+        ''' Under construction. '''
+
         X = self.x
         y = self.y
-        # sss = ShuffleSplit(n_splits=5, test_size=random.uniform(0.7, 0.9), random_state=random.randint(0, 100))
-        sss = ShuffleSplit(
+
+        # df_train_set = pd.DataFrame(data=X)
+        # df_train_set['y'] = y
+        # db_n_df = df_train_set.sample(
+        #     frac=0.5, replace=False, random_state=random.randint(0, 100))
+        # X_train = db_n_df.drop(columns=['y']).to_numpy()
+        # y_train = db_n_df['y'].to_numpy()
+
+        sss = StratifiedShuffleSplit(
             n_splits=1, train_size=0.5, random_state=random.randint(0, 100))
+
         for train_index, test_index in sss.split(X, y):
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
@@ -44,6 +55,3 @@ class Database:
 
     def get_score(self, classifier):
         classifier.score(self.x, self.y)
-
-    def get_sub_samples():
-        pass

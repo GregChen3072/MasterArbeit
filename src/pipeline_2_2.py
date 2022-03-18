@@ -113,6 +113,7 @@ def pipeline_2_2_weighted(X_train, X_test, y_train, y_test, s, E):
             weight_databases=False
         )
 
+        # weighted version of make fit
         classifier_combined = classifier.make_fit_w(
             db_pair)
 
