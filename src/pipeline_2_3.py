@@ -12,7 +12,7 @@ def pipeline_2_3_unweighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
     n_estimators = E
     n_db = 2
-    n_iteration = 5
+    n_iteration = 1
 
     n_batch_size = int(n_estimators / (n_db * n_iteration))
     ''' n_estimators = n_batch_size * n_db * n_iteration '''
@@ -82,7 +82,7 @@ def pipeline_2_3_weighted(X_train, X_test, y_train, y_test, s, E):
     # Settings I
     n_estimators = E
     n_db = 2
-    n_iteration = 5
+    n_iteration = 1
 
     n_batch_size = int(n_estimators / (n_db * n_iteration))
     ''' n_estimators = n_batch_size * n_db * n_iteration '''
