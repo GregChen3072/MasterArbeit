@@ -17,8 +17,8 @@ def pipeline_2_3_unweighted(X_train, X_test, y_train, y_test, s, E):
     n_batch_size = int(n_estimators / (n_db * n_iteration))
     ''' n_estimators = n_batch_size * n_db * n_iteration '''
 
-    # 20 estimators / 5 dbs / 1 rounds = 4 estimators at each db for each round
-    # 20 estimators / 5 dbs / 2 rounds = 2 estimators at each db for each round
+    # e. g. 20 estimators / 5 dbs / 1 rounds = 4 estimators at each db for each round
+    # e. g. 20 estimators / 5 dbs / 2 rounds = 2 estimators at each db for each round
 
     # Settings II
     n_type = "batch"
