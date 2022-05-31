@@ -25,17 +25,6 @@ def load_iris_data():
     return X, y
 
 
-def load_credit_card_fraud_data():
-    path = "/Users/greg/Downloads/AR_Master_Thesis/data/creditcard.csv"
-    data = pd.read_csv(path).sample(n=10000, random_state=42)
-
-    # Remove the 1st column because it refers to time
-    X = data.iloc[:, 1:-1].to_numpy()
-    y = data.iloc[:, -1].to_numpy()
-
-    return X, y, "Cred"
-
-
 def load_HCC_data():
     path = "/Users/greg/Downloads/AR_Master_Thesis/data/HCC_preprocessed.csv"
     data = pd.read_csv(path)
@@ -58,8 +47,9 @@ def load_ILPD_data():
     return X, y, "ILPD"
 
 
-def load_TCGA_BRCA_data():
-    pass
+def load_WDBC_data():
+    X, y = load_breast_cancer(return_X_y=True)
+    return X, y, "WDBC"
 
 
 def make_database(x, y):
@@ -167,71 +157,3 @@ def simulate_db_size_imbalance(x_train, y_train, balance_step: float = 0.05, k: 
     }
 
     return res
-
-
-def __simulate_class_imbalance():
-    '''
-        Interval: 10%
-        P 10% vs N 90%
-        ...
-        P 90% vs N 10%
-    '''
-    # Simulate a random data set with binary class imbalance.
-    X, y = make_classification(
-        n_classes=2,
-        class_sep=2,
-        weights=[0.05, 0.95],
-        n_informative=3,
-        n_redundant=1,
-        flip_y=0,
-        n_features=20,
-        n_clusters_per_class=1,
-        n_samples=1000,
-        random_state=10
-    )
-
-    print('Original dataset shape %s' % Counter(y))
-
-    # When float, it corresponds to the desired ratio
-    # of the number of samples in the minority class
-    # over the number of samples in the majority class after resampling.
-
-    # Therefore, the ratio is expressed as: alpha = N_rm / N_M
-
-    list_of_N_rm = [1, 2, 3, 4, 5]
-    N_rm = 1  # the number of samples in the minority class after resampling
-    N_M = 10 - N_rm  # the number of samples in the majority class.
-
-    sm = SMOTE(
-        sampling_strategy=float(N_rm/N_M),  # when P 50% vs N 50%
-        k_neighbors=5,
-        n_jobs=-1,
-        random_state=6
-    )
-
-    X_res, y_res = sm.fit_resample(X, y)
-
-    print('Resampled dataset shape %s' % Counter(y_res))
-
-
-def __run_proto(n_estimators, test_size):
-    iris = load_iris()
-    X = iris.get("data")
-    y = iris.get("target")
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size)
-
-    # Create adaboost classifer object
-    abc = AdaBoostClassifier(n_estimators=n_estimators,
-                             learning_rate=1, random_state=0)
-
-    # Train Adaboost Classifer
-    model = abc.fit(X_train, y_train)
-
-    # Predict the response for test dataset
-    y_pred = model.predict(X_test)
-
-    # calculate and print model accuracy
-    print("AdaBoost Classifier Model Accuracy:",
-          accuracy_score(y_test, y_pred))

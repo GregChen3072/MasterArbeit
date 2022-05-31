@@ -1,6 +1,5 @@
 # Load data
-from sklearn.datasets import load_breast_cancer
-from db_simulator import load_credit_card_fraud_data, load_HCC_data, load_ILPD_data
+from db_simulator import load_WDBC_data, load_HCC_data, load_ILPD_data
 
 # Load objects
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -19,13 +18,15 @@ def make_database(x, y):
     return Database(x, y)
 
 
-# X, y = load_breast_cancer(return_X_y=True)
-# X, y = load_HCC_data()
-# X, y = load_credit_card_fraud_data()
-X, y = load_ILPD_data()
+path_res_local = "/Users/greg/Downloads/AR_Master_Thesis/output/"
+path_res_cloud = "/Users/greg/Documents/thesis/output/"
+
+X, y, current_dataset = load_WDBC_data()  # Load WDBC data set
+# X, y, current_dataset = load_HCC_data()
+# X, y, current_dataset = load_ILPD_data()
 
 # Settings Evaluation
-n_splits = 100
+n_splits = 100  # Set the number of rounds for Monte-Carlo cross validation
 
 sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.1, random_state=6)
 sss.get_n_splits(X, y)
@@ -77,8 +78,9 @@ df_res_comm_effi = pd.DataFrame(
 )
 
 df_res_comm_effi.to_csv(
-    '/Users/greg/Downloads/AR_Master_Thesis/output/vis_ILPD_comm_effi.csv', index=False, header=True)
-
+    path_res_local + 'res_' + current_dataset + '_comm_effi.csv', index=False, header=True)
+df_res_comm_effi.to_csv(
+    path_res_cloud + 'res_' + current_dataset + '_comm_effi.csv', index=False, header=True)
 
 print('Results saved for Test Comm Effi. ')
 print('Experiments completed! ')

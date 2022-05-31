@@ -1,6 +1,6 @@
 # Load data
 from sklearn.datasets import load_breast_cancer
-from db_simulator import load_credit_card_fraud_data, load_HCC_data, load_ILPD_data
+from db_simulator import load_WDBC_data, load_HCC_data, load_ILPD_data
 
 # For computing multiple metrics
 from sklearn.metrics import make_scorer
@@ -30,9 +30,7 @@ def make_database(x, y):
     return Database(x, y)
 
 
-current_dataset = "BRCA"
-X, y = load_breast_cancer(return_X_y=True)
-# X, y, current_dataset = load_credit_card_fraud_data()
+X, y, current_dataset = load_WDBC_data()  # Load WDBC data set
 # X, y, current_dataset = load_HCC_data()
 # X, y, current_dataset = load_ILPD_data()
 
@@ -40,7 +38,8 @@ print(current_dataset)
 
 E = 500  # Number of all estimators to be collected (from all sites all rounds)
 # n_estimators = 500 set as default for binary inter-site imbalance
-n_splits = 100  # 100
+
+n_splits = 100  # Set the number of rounds for Monte-Carlo cross validation
 
 
 path_res_local = "/Users/greg/Downloads/AR_Master_Thesis/output/"
@@ -96,9 +95,9 @@ df_1_1 = pd.DataFrame(
              'AUC Score', 'ACC Score']
 )
 
-df_1_1.to_csv(path_res_local + 'vis_' + current_dataset + '_1_1.csv',
+df_1_1.to_csv(path_res_local + 'res_' + current_dataset + '_1_1.csv',
               index=False, header=True)
-df_1_1.to_csv(path_res_cloud + 'vis_' + current_dataset + '_1_1.csv',
+df_1_1.to_csv(path_res_cloud + 'res_' + current_dataset + '_1_1.csv',
               index=False, header=True)
 
 print('Results saved for pipeline 1 1. ')
@@ -111,9 +110,9 @@ df_1_2 = pd.DataFrame(
              'AUC Score', 'ACC Score']
 )
 
-df_1_2.to_csv(path_res_local + 'vis_' + current_dataset + '_1_2.csv',
+df_1_2.to_csv(path_res_local + 'res_' + current_dataset + '_1_2.csv',
               index=False, header=True)
-df_1_2.to_csv(path_res_cloud + 'vis_' + current_dataset + '_1_2.csv',
+df_1_2.to_csv(path_res_cloud + 'res_' + current_dataset + '_1_2.csv',
               index=False, header=True)
 
 print('Results saved for pipeline 1 2. ')
@@ -125,9 +124,9 @@ df_1_3 = pd.DataFrame(
     columns=['s', 'r', 'n', 'e', 'F-1 Score', 'MCC Score',
              'AUC Score', 'ACC Score']
 )
-df_1_3.to_csv(path_res_local + 'vis_' + current_dataset + '_1_3.csv',
+df_1_3.to_csv(path_res_local + 'res_' + current_dataset + '_1_3.csv',
               index=False, header=True)
-df_1_3.to_csv(path_res_cloud + 'vis_' + current_dataset + '_1_3.csv',
+df_1_3.to_csv(path_res_cloud + 'res_' + current_dataset + '_1_3.csv',
               index=False, header=True)
 
 print('Results saved for pipeline 1 2. ')
